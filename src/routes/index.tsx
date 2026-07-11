@@ -5,6 +5,7 @@ export const Route = createFileRoute('/')({ component: VoiceLab })
 
 type VoiceMode = 'original' | 'lite' | 'neural'
 type NeuralStatus = 'loading' | 'webgpu' | 'wasm' | 'error'
+type Diagnostics = { averageMs: number; maxMs: number; queue: number; underruns: number; bufferedMs: number }
 
 const SAMPLES = [
   { id: 'english', language: 'EN', label: 'English', voice: 'Skylar', duration: '0:23', file: '/audio/english.wav' },
@@ -30,6 +31,7 @@ function VoiceLab() {
   const [neuralStatus, setNeuralStatus] = useState<NeuralStatus>('loading')
   const [level, setLevel] = useState(0)
   const [message, setMessage] = useState('Choose a sample to begin')
+  const [diagnostics, setDiagnostics] = useState<Diagnostics>({ averageMs: 0, maxMs: 0, queue: 0, underruns: 0, bufferedMs: 0 })
   const audioRef = useRef<HTMLAudioElement>(null)
   const engineRef = useRef<AudioEngine | null>(null)
   const workerRef = useRef<Worker | null>(null)
@@ -50,6 +52,8 @@ function VoiceLab() {
       } else if (data.type === 'error') {
         setNeuralStatus('error')
         setMessage(`Neural error · ${data.message}`)
+      } else if (data.type === 'stats') {
+        setDiagnostics((current) => ({ ...current, averageMs: data.averageMs, maxMs: data.maxMs, queue: data.queue }))
       }
     }
     worker.onerror = () => {
@@ -147,6 +151,8 @@ function VoiceLab() {
     worklet.port.onmessage = ({ data }) => {
       if (data.type === 'input' && modeRef.current === 'neural' && neuralReadyRef.current) {
         workerRef.current?.postMessage({ type: 'audio', samples: data.samples }, [data.samples.buffer])
+      } else if (data.type === 'stats') {
+        setDiagnostics((current) => ({ ...current, underruns: data.underruns, bufferedMs: data.bufferedMs }))
       }
     }
 
@@ -216,7 +222,7 @@ function VoiceLab() {
           <div className="meter-label"><span>SIGNAL LEVEL</span><span className="meter-value">{Math.round(level * 100).toString().padStart(3, '0')}%</span></div>
           <div className="meter" aria-label="Signal level"><div className="meter-fill" style={{ width: `${Math.max(2, level * 100)}%` }} /><div className="meter-ticks"><span /><span /><span /><span /><span /></div></div>
           <p className="output-copy">{message}</p>
-          <div className={`mode-status ${voiceMode}`}><span>{voiceMode === 'original' ? '○' : '●'}</span><div><strong>{voiceMode === 'original' ? 'Processing disabled' : voiceMode === 'lite' ? 'Tonal profile enabled' : 'Neural conversion enabled'}</strong><small>{voiceMode === 'neural' ? `Runtime: ${neuralStatus.toUpperCase()}` : 'Mode changes apply automatically'}</small></div></div>
+          <div className={`mode-status ${voiceMode}`}><span>{voiceMode === 'original' ? '○' : '●'}</span><div><strong>{voiceMode === 'original' ? 'Processing disabled' : voiceMode === 'lite' ? 'Tonal profile enabled' : 'Neural conversion enabled'}</strong><small>{voiceMode === 'neural' ? `Runtime: ${neuralStatus.toUpperCase()} · avg ${diagnostics.averageMs.toFixed(1)}ms · max ${diagnostics.maxMs.toFixed(0)}ms · queue ${diagnostics.queue} · buffer ${diagnostics.bufferedMs.toFixed(0)}ms · underruns ${diagnostics.underruns}` : 'Mode changes apply automatically'}</small></div></div>
           <div className="tip"><span className="tip-star">✦</span><div><strong>Compare voices</strong><p>Replay the same sample while switching tabs, then compare languages to hear how consistently they converge.</p></div></div>
         </div>
       </section>

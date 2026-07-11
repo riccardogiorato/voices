@@ -10,6 +10,7 @@ class NeuralVoiceIO extends AudioWorkletProcessor {
     this.inputCount = 0
     this.outputRatio = 16000 / sampleRate
     this.outputBuffer = new StreamingAudioBuffer(32768, 3200)
+    this.processCalls = 0
     this.port.onmessage = ({ data }) => {
       if (data?.type === 'output') this.outputBuffer.push(data.samples)
       if (data?.type === 'reset') this.outputBuffer.reset()
@@ -40,6 +41,10 @@ class NeuralVoiceIO extends AudioWorkletProcessor {
     const output = outputs[0]?.[0]
     if (input?.length) this.capture(input)
     if (output?.length) this.outputBuffer.render(output, this.outputRatio)
+    this.processCalls++
+    if (this.processCalls % Math.max(1, Math.round(sampleRate / 128)) === 0) {
+      this.port.postMessage({ type: 'stats', underruns: this.outputBuffer.underruns, bufferedMs: this.outputBuffer.available / 16 })
+    }
     return true
   }
 }

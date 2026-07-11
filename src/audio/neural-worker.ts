@@ -16,6 +16,9 @@ let states: Record<string, ort.Tensor> = {}
 let context = new Float32Array(32)
 let audioQueue: Float32Array[] = []
 let processing = false
+let inferenceCount = 0
+let inferenceTotalMs = 0
+let inferenceMaxMs = 0
 const workerScope = self as unknown as { postMessage: (message: unknown, transfer?: Transferable[]) => void; onmessage: ((event: MessageEvent<WorkerMessage>) => void) | null }
 
 function zeros(shape: number[]) {
@@ -59,6 +62,7 @@ async function createSession() {
 
 async function convert(samples: Float32Array) {
   if (!session) return
+  const startedAt = performance.now()
   const audio = new Float32Array(240)
   audio.set(context)
   audio.set(samples, 32)
@@ -75,6 +79,11 @@ async function convert(samples: Float32Array) {
   }
   const output = new Float32Array(results.converted.data as Float32Array)
   workerScope.postMessage({ type: 'output', samples: output }, [output.buffer])
+  const elapsedMs = performance.now() - startedAt
+  inferenceCount++
+  inferenceTotalMs += elapsedMs
+  inferenceMaxMs = Math.max(inferenceMaxMs, elapsedMs)
+  if (inferenceCount % 25 === 0) workerScope.postMessage({ type: 'stats', averageMs: inferenceTotalMs / inferenceCount, maxMs: inferenceMaxMs, queue: audioQueue.length })
 }
 
 workerScope.onmessage = ({ data }: MessageEvent<WorkerMessage>) => {

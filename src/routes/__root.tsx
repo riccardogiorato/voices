@@ -5,8 +5,13 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
-      { name: 'description', content: 'Realtime voice conversion experiments in the browser.' },
+      { title: 'Voice Lab — realtime browser voice conversion' },
+      {
+        name: 'description',
+        content: 'Experiment with realtime voice conversion, robotic effects, and neural voice processing directly in your browser.',
+      },
     ],
+    links: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
   }),
   component: () => (
     <html lang="en">

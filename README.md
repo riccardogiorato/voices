@@ -1,20 +1,26 @@
 # Voice Lab
 
-A realtime browser playground for robotic voice conversion experiments, built with Bun, TanStack Start, React, and the Web Audio API.
+A multilingual browser playground for comparing original speech with tonal normalization and neural any-to-one voice conversion, built with Bun, TanStack Start, React, and the Web Audio API.
 
-Audio stays inside the browser. Use a live microphone or load a local audio file, then adjust distortion, filter cutoff, playback pitch, and intensity.
+The app includes five 20–30 second samples generated with Together AI's `cartesia/sonic-3` model: English, Italian, Spanish, French, and Japanese. Runtime playback is static and does not call Together AI.
 
 Voice modes:
 
 - **Common Voice Lite** uses Web Audio EQ, dynamics normalization, saturation, and limiting with near-zero latency.
 - **Common Voice Neural** runs a browser-exported LLVC any-to-one model through ONNX Runtime Web. It prefers WebGPU and falls back to WASM.
-- **Effects** contains the robotic presets and manual controls.
+- **Original** disables processing and plays the source sample unchanged.
 
-The neural model is downloaded as a static application asset and runs entirely inside the browser. Microphone audio is never sent to a server.
+The neural model preloads when the page opens and runs entirely inside the browser. Selecting a mode applies it automatically; there is no engage button.
 
 ```bash
 bun install
 bun run dev
+```
+
+To regenerate the sample assets, place `TOGETHER_API_KEY` in `.env` and run:
+
+```bash
+bun run generate:samples
 ```
 
 Production checks:

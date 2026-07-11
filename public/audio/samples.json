@@ -1,0 +1,37 @@
+[
+  {
+    "id": "english",
+    "language": "en",
+    "label": "English",
+    "voiceName": "Skylar - Friendly Guide",
+    "file": "/audio/english.wav"
+  },
+  {
+    "id": "italian",
+    "language": "it",
+    "label": "Italian",
+    "voiceName": "Giulia - Teacherly Voice",
+    "file": "/audio/italian.wav"
+  },
+  {
+    "id": "spanish",
+    "language": "es",
+    "label": "Spanish",
+    "voiceName": "Lucia - Radiant Host",
+    "file": "/audio/spanish.wav"
+  },
+  {
+    "id": "french",
+    "language": "fr",
+    "label": "French",
+    "voiceName": "Amélie - Decisive Agent",
+    "file": "/audio/french.wav"
+  },
+  {
+    "id": "japanese",
+    "language": "ja",
+    "label": "Japanese",
+    "voiceName": "Aiko - Calming Voice",
+    "file": "/audio/japanese.wav"
+  }
+]

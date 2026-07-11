@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "generate:samples": "bun scripts/generate-audio-samples.mjs",
     "start": "vite preview",
     "test:neural": "bun scripts/test-neural.mjs",
     "test:jitter": "bun scripts/test-jitter-buffer.mjs",

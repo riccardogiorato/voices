@@ -14,7 +14,8 @@ let session: ort.InferenceSession | null = null
 let runtime: Runtime = 'wasm'
 let states: Record<string, ort.Tensor> = {}
 let context = new Float32Array(32)
-let processing = Promise.resolve()
+let audioQueue: Float32Array[] = []
+let processing = false
 const workerScope = self as unknown as { postMessage: (message: unknown, transfer?: Transferable[]) => void; onmessage: ((event: MessageEvent<WorkerMessage>) => void) | null }
 
 function zeros(shape: number[]) {
@@ -24,6 +25,14 @@ function zeros(shape: number[]) {
 function reset() {
   states = Object.fromEntries(Object.entries(STATE_SHAPES).map(([name, shape]) => [name, zeros(shape)]))
   context = new Float32Array(32)
+  audioQueue = []
+}
+
+async function processQueue() {
+  if (processing) return
+  processing = true
+  while (audioQueue.length) await convert(audioQueue.shift()!)
+  processing = false
 }
 
 async function createSession() {
@@ -71,5 +80,9 @@ async function convert(samples: Float32Array) {
 workerScope.onmessage = ({ data }: MessageEvent<WorkerMessage>) => {
   if (data.type === 'init') void createSession().catch((error) => workerScope.postMessage({ type: 'error', message: error instanceof Error ? error.message : 'Model initialization failed' }))
   if (data.type === 'reset') reset()
-  if (data.type === 'audio') processing = processing.then(() => convert(data.samples)).catch((error) => workerScope.postMessage({ type: 'error', message: error instanceof Error ? error.message : 'Inference failed' }))
+  if (data.type === 'audio') {
+    audioQueue.push(data.samples)
+    if (audioQueue.length > 32) audioQueue.splice(0, audioQueue.length - 16)
+    void processQueue().catch((error) => workerScope.postMessage({ type: 'error', message: error instanceof Error ? error.message : 'Inference failed' }))
+  }
 }

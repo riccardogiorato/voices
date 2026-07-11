@@ -12,6 +12,7 @@ class NeuralVoiceIO extends AudioWorkletProcessor {
     this.outputBuffer = new StreamingAudioBuffer(32768, 3200)
     this.port.onmessage = ({ data }) => {
       if (data?.type === 'output') this.outputBuffer.push(data.samples)
+      if (data?.type === 'reset') this.outputBuffer.reset()
     }
   }
 

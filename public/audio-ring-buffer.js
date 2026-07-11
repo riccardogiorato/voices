@@ -12,6 +12,16 @@ export class StreamingAudioBuffer {
     this.lastSample = 0
   }
 
+  reset() {
+    this.readIndex = 0
+    this.writeIndex = 0
+    this.available = 0
+    this.phase = 0
+    this.started = false
+    this.fade = 0
+    this.lastSample = 0
+  }
+
   push(chunk) {
     for (let i = 0; i < chunk.length; i++) {
       this.samples[this.writeIndex] = chunk[i]

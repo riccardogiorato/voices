@@ -5,7 +5,7 @@ export const Route = createFileRoute('/')({ component: VoiceLab })
 
 type VoiceMode = 'original' | 'lite' | 'neural'
 type NeuralStatus = 'loading' | 'webgpu' | 'wasm' | 'error'
-type Diagnostics = { averageMs: number; maxMs: number; queue: number; underruns: number; bufferedMs: number }
+type Diagnostics = { averageMs: number; maxMs: number; p99Ms: number; queue: number; underruns: number; bufferedMs: number; threads: number; isolated: boolean }
 
 const SAMPLES = [
   { id: 'english', language: 'EN', label: 'English', voice: 'Skylar', duration: '0:23', file: '/audio/english.wav' },
@@ -31,7 +31,7 @@ function VoiceLab() {
   const [neuralStatus, setNeuralStatus] = useState<NeuralStatus>('loading')
   const [level, setLevel] = useState(0)
   const [message, setMessage] = useState('Choose a sample to begin')
-  const [diagnostics, setDiagnostics] = useState<Diagnostics>({ averageMs: 0, maxMs: 0, queue: 0, underruns: 0, bufferedMs: 0 })
+  const [diagnostics, setDiagnostics] = useState<Diagnostics>({ averageMs: 0, maxMs: 0, p99Ms: 0, queue: 0, underruns: 0, bufferedMs: 0, threads: 0, isolated: false })
   const audioRef = useRef<HTMLAudioElement>(null)
   const engineRef = useRef<AudioEngine | null>(null)
   const workerRef = useRef<Worker | null>(null)
@@ -46,14 +46,15 @@ function VoiceLab() {
       if (data.type === 'ready') {
         neuralReadyRef.current = true
         setNeuralStatus(data.runtime)
-        if (modeRef.current === 'neural') setMessage(`Neural ready · ${String(data.runtime).toUpperCase()}`)
+        setDiagnostics((current) => ({ ...current, threads: data.threads, isolated: data.isolated }))
+        if (modeRef.current === 'neural') setMessage(`Neural ready · ${String(data.runtime).toUpperCase()} · ${data.isolated ? `${data.threads} threads` : 'single-thread'}`)
       } else if (data.type === 'output') {
         engineRef.current?.worklet.port.postMessage({ type: 'output', samples: data.samples }, [data.samples.buffer])
       } else if (data.type === 'error') {
         setNeuralStatus('error')
         setMessage(`Neural error · ${data.message}`)
       } else if (data.type === 'stats') {
-        setDiagnostics((current) => ({ ...current, averageMs: data.averageMs, maxMs: data.maxMs, queue: data.queue }))
+        setDiagnostics((current) => ({ ...current, averageMs: data.averageMs, maxMs: data.maxMs, p99Ms: data.p99Ms, queue: data.queue }))
       }
     }
     worker.onerror = () => {
@@ -222,7 +223,7 @@ function VoiceLab() {
           <div className="meter-label"><span>SIGNAL LEVEL</span><span className="meter-value">{Math.round(level * 100).toString().padStart(3, '0')}%</span></div>
           <div className="meter" aria-label="Signal level"><div className="meter-fill" style={{ width: `${Math.max(2, level * 100)}%` }} /><div className="meter-ticks"><span /><span /><span /><span /><span /></div></div>
           <p className="output-copy">{message}</p>
-          <div className={`mode-status ${voiceMode}`}><span>{voiceMode === 'original' ? '○' : '●'}</span><div><strong>{voiceMode === 'original' ? 'Processing disabled' : voiceMode === 'lite' ? 'Tonal profile enabled' : 'Neural conversion enabled'}</strong><small>{voiceMode === 'neural' ? `Runtime: ${neuralStatus.toUpperCase()} · avg ${diagnostics.averageMs.toFixed(1)}ms · max ${diagnostics.maxMs.toFixed(0)}ms · queue ${diagnostics.queue} · buffer ${diagnostics.bufferedMs.toFixed(0)}ms · underruns ${diagnostics.underruns}` : 'Mode changes apply automatically'}</small></div></div>
+          <div className={`mode-status ${voiceMode}`}><span>{voiceMode === 'original' ? '○' : '●'}</span><div><strong>{voiceMode === 'original' ? 'Processing disabled' : voiceMode === 'lite' ? 'Tonal profile enabled' : 'Neural conversion enabled'}</strong><small>{voiceMode === 'neural' ? `Runtime: ${neuralStatus.toUpperCase()} · ${diagnostics.isolated ? 'iso' : 'no-iso'} ${diagnostics.threads}t · avg ${diagnostics.averageMs.toFixed(1)}ms · p99 ${diagnostics.p99Ms.toFixed(0)}ms · max ${diagnostics.maxMs.toFixed(0)}ms · queue ${diagnostics.queue} · buffer ${diagnostics.bufferedMs.toFixed(0)}ms · underruns ${diagnostics.underruns}` : 'Mode changes apply automatically'}</small></div></div>
           <div className="tip"><span className="tip-star">✦</span><div><strong>Compare voices</strong><p>Replay the same sample while switching tabs, then compare languages to hear how consistently they converge.</p></div></div>
         </div>
       </section>
@@ -245,5 +246,5 @@ function makeSoftCurve(amount: number) {
 function ModeCard({ mode, neuralStatus }: { mode: VoiceMode; neuralStatus: NeuralStatus }) {
   if (mode === 'original') return <div className="common-mode-card"><span className="mode-glyph">○</span><div><strong>Original audio</strong><p>The generated voice plays untouched. Use this baseline to hear how much identity changes in the other modes.</p><ul><li>No processing</li><li>Original timing and timbre</li><li>Immediate playback</li></ul></div></div>
   if (mode === 'lite') return <div className="common-mode-card"><span className="mode-glyph">≈</span><div><strong>Common Voice Lite</strong><p>A consistent tonal profile using voice-band EQ, strong dynamics normalization, soft saturation, and limiting.</p><ul><li>Near-zero latency</li><li>No model required</li><li>Subtle identity reduction</li></ul></div></div>
-  return <div className="common-mode-card neural-card"><span className="mode-glyph">◇</span><div><strong>Common Voice Neural</strong><p>The LLVC any-to-one model maps every language and speaker toward one learned target identity.</p><ul><li>{neuralStatus === 'loading' ? 'Preloading model…' : neuralStatus === 'error' ? 'Model unavailable' : `${neuralStatus.toUpperCase()} ready`}</li><li>200 ms anti-glitch buffer</li><li>Browser-local inference</li></ul></div></div>
+  return <div className="common-mode-card neural-card"><span className="mode-glyph">◇</span><div><strong>Common Voice Neural</strong><p>The LLVC any-to-one model maps every language and speaker toward one learned target identity.</p><ul><li>{neuralStatus === 'loading' ? 'Preloading model…' : neuralStatus === 'error' ? 'Model unavailable' : `${neuralStatus.toUpperCase()} ready`}</li><li>400 ms anti-glitch buffer</li><li>Browser-local inference</li></ul></div></div>
 }

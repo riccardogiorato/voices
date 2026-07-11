@@ -1,3 +1,12 @@
+// AudioWorklet for the neural path. Captures input at the device rate, decimates
+// to 16 kHz in 208-sample chunks for the worker, and renders the worker's
+// converted samples back at the device rate through a streaming ring buffer.
+//
+// The prebuffer is 400 ms (6400 samples at 16 kHz) — double the original 200 ms.
+// The extra depth absorbs residual inference spikes on the WebGPU/single-thread
+// fallbacks so the output never underruns. (Pair this with warmup in the worker,
+// which removes the cold-start spike entirely on every backend.)
+
 import { StreamingAudioBuffer } from './audio-ring-buffer.js'
 
 class NeuralVoiceIO extends AudioWorkletProcessor {
@@ -9,7 +18,7 @@ class NeuralVoiceIO extends AudioWorkletProcessor {
     this.inputChunk = new Float32Array(208)
     this.inputCount = 0
     this.outputRatio = 16000 / sampleRate
-    this.outputBuffer = new StreamingAudioBuffer(32768, 3200)
+    this.outputBuffer = new StreamingAudioBuffer(65536, 6400)
     this.processCalls = 0
     this.port.onmessage = ({ data }) => {
       if (data?.type === 'output') this.outputBuffer.push(data.samples)

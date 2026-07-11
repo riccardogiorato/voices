@@ -51,6 +51,45 @@ def main():
         opset_version=18,
         do_constant_folding=True,
     )
+
+    # Graph-level simplification (onnx-simplifier): constant folding, dead-code
+    # elimination, op fusion. Verified bit-identical on this model (check_n=3 +
+    # ORT cross-check, max_abs_diff = 0.0). Removes the always-zero label-embedding
+    # MLP, the over-sized [1,200,256] positional-encoding buffer (only 26 positions
+    # are used), 22 Transposes and all 18 Pads — ~11% fewer nodes, ~14% smaller.
+    # See PROGRESS.md and the LLVC paper research (arXiv:2311.00873).
+    try:
+        import os
+        import onnx
+        from onnxsim import simplify
+        raw = onnx.load(str(args.output), load_external_data=True)
+        simplified, ok = simplify(
+            raw,
+            overwrite_input_shapes={
+                "audio": [1, 1, int(audio.shape[-1])],
+                "enc_state": list(enc.shape),
+                "dec_state": list(dec.shape),
+                "out_state": list(out.shape),
+                "conv_state": list(conv.shape),
+            },
+            perform_optimization=True,
+            check_n=3,
+        )
+        tmp = args.output.with_suffix(".simp.onnx")
+        onnx.save_model(
+            simplified, str(tmp),
+            save_as_external_data=True, all_tensors_to_one_file=True,
+            location=tmp.name + ".data", size_threshold=1024,
+        )
+        data_target = args.output.with_name(args.output.name + ".data")
+        os.replace(tmp, args.output)
+        os.replace(args.output.with_suffix(".simp.onnx.data"), data_target)
+        print(f"onnx-simplifier: ok={ok} nodes {len(raw.graph.node)} -> {len(simplified.graph.node)}")
+    except ImportError:
+        print("onnx-simplifier: onnxsim not installed; skipping (pip install onnxsim)")
+    except Exception as exc:  # noqa: BLE001 - never corrupt a successful raw export
+        print(f"onnx-simplifier: skipped ({exc}); keeping raw export")
+
     print(json.dumps({
         "output": str(args.output),
         "sampleRate": config["data"]["sr"],

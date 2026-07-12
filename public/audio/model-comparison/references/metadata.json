@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-07-13T00:44:07+02:00",
+  "durationSeconds": 15,
+  "sampleRate": 16000,
+  "targets": {
+    "lj-speech": {
+      "label": "LJ Speech / Linda Johnson",
+      "license": "Public domain in the US; verify jurisdiction-specific status",
+      "provenance": "https://keithito.com/LJ-Speech-Dataset/",
+      "sourceSamples": [
+        {
+          "file": "lj-001-0001.wav",
+          "text": "Printing, in the only sense with which we are at present concerned, differs from most if not from all the arts and crafts represented in the Exhibition"
+        },
+        {
+          "file": "lj-001-0002.wav",
+          "text": "in being comparatively modern."
+        },
+        {
+          "file": "lj-001-0003.wav",
+          "text": "For although the Chinese took impressions from wood blocks engraved in relief for centuries before the woodcutters of the Netherlands, by a similar process"
+        }
+      ]
+    },
+    "cmu-rms": {
+      "label": "CMU ARCTIC RMS",
+      "license": "CMU ARCTIC permissive free-software data license",
+      "provenance": "http://festvox.org/cmu_arctic/",
+      "sourceSamples": [
+        "https://www.cs.cmu.edu/~dhuggins/Projects/ASR_Coding/tests_with_mfcc/rms/001.wav",
+        "https://www.cs.cmu.edu/~dhuggins/Projects/ASR_Coding/tests_with_mfcc/rms/002.wav",
+        "https://www.cs.cmu.edu/~dhuggins/Projects/ASR_Coding/tests_with_mfcc/rms/003.wav",
+        "https://www.cs.cmu.edu/~dhuggins/Projects/ASR_Coding/tests_with_mfcc/rms/004.wav"
+      ]
+    },
+    "llvc-target": {
+      "label": "LLVC fixed target (derived reference)",
+      "license": "Derived locally from the MIT-licensed KoeAI LLVC checkpoint",
+      "provenance": "public/audio/quantization-comparison/english-fp32.wav"
+    }
+  }
+}

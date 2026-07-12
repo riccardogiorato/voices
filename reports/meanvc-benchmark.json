@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-07-13T00:59:47+02:00",
+  "source": "public/audio/short-unseen-tests/english-samantha.wav",
+  "precision": "official FP32 PyTorch checkpoint",
+  "loadSeconds": 9.925335957999778,
+  "advertisedCheckpointBytes": 237823574,
+  "actualRuntimeArtifactBytes": 2745360176,
+  "parameters": 14064720,
+  "steps": 2,
+  "chunkSize": 20,
+  "runs": [
+    {
+      "target": "lj-speech",
+      "reference": "public/audio/model-comparison/references/lj-speech-linda-johnson.wav",
+      "output": "public/audio/model-comparison/outputs/meanvc-lj-speech.wav",
+      "featureSeconds": 4.120963875000598,
+      "modelAndVocoderSeconds": 1.5441539287567139,
+      "totalSeconds": 5.667338166000263,
+      "modelRtf": 0.11850759238347766,
+      "endToEndRtf": 0.4349453696086158,
+      "audio": {
+        "durationSeconds": 13.03,
+        "sampleRate": 16000,
+        "peak": 0.999969482421875,
+        "rms": 0.13297975063323975,
+        "finite": true
+      }
+    },
+    {
+      "target": "cmu-rms",
+      "reference": "public/audio/model-comparison/references/cmu-arctic-rms.wav",
+      "output": "public/audio/model-comparison/outputs/meanvc-cmu-rms.wav",
+      "featureSeconds": 3.1714987920022395,
+      "modelAndVocoderSeconds": 1.488969087600708,
+      "totalSeconds": 4.6629354169999715,
+      "modelRtf": 0.11427237817350024,
+      "endToEndRtf": 0.3578615055257077,
+      "audio": {
+        "durationSeconds": 13.03,
+        "sampleRate": 16000,
+        "peak": 1.0,
+        "rms": 0.18231843411922455,
+        "finite": true
+      }
+    },
+    {
+      "target": "llvc-target",
+      "reference": "public/audio/model-comparison/references/llvc-fixed-target.wav",
+      "output": "public/audio/model-comparison/outputs/meanvc-llvc-target.wav",
+      "featureSeconds": 3.4928405409991683,
+      "modelAndVocoderSeconds": 1.5275061130523682,
+      "totalSeconds": 5.022772915999667,
+      "modelRtf": 0.11722993960494,
+      "endToEndRtf": 0.38547758372982865,
+      "audio": {
+        "durationSeconds": 13.03,
+        "sampleRate": 16000,
+        "peak": 0.9375,
+        "rms": 0.17621101438999176,
+        "finite": true
+      }
+    }
+  ],
+  "compatibilityPatch": "Removed unused Trainer imports from temporary src/model/__init__.py to avoid training-only dependencies."
+}

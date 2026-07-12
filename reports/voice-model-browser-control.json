@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-07-13T01:01:00+02:00",
+  "browser": "Codex in-app Chromium browser",
+  "url": "http://localhost:5180/?benchmark=1&threads=8&model=q8-high",
+  "runtime": "wasm",
+  "isolated": true,
+  "threads": 8,
+  "model": "q8-high",
+  "iterations": 250,
+  "averageMs": 7.013159999832511,
+  "p50Ms": 6.629999998956919,
+  "p95Ms": 8.769999999552965,
+  "p99Ms": 9.984999999403954,
+  "maxMs": 11.925000000745058,
+  "finite": true,
+  "peak": 0.09865142405033112
+}

@@ -800,3 +800,80 @@ Evidence:
 - `reports/quantization-short-unseen-evaluation.json`
 - `reports/quantization-short-unseen-playback.json`
 - Listening WAVs: `public/audio/short-unseen-comparison/`
+
+---
+
+## 16. Zero-shot voice-cloning model matrix (2026-07-13)
+
+One 13.07-second unseen English/Samantha source was converted toward three
+15-second targets: public-domain LJ Speech/Linda Johnson, CMU ARCTIC RMS, and a
+reference derived from the existing LLVC target. The target-generation script
+and `references/metadata.json` preserve URLs, source utterances, transforms, and
+license notes.
+
+MeanVC, OpenVoice V2 Q8, and FAcodec Q8 ran all three targets. The current Q8
+High LLVC is a fixed any-to-one checkpoint, not a zero-shot voice cloner, so it
+has one valid target row; producing the other two voices would require training.
+
+### Native CPU speed
+
+Network downloads are excluded. RTF below 1.0 is faster than real time.
+
+| Model | Runtime artifacts | Mean RTF | Range | Browser/live assessment |
+|---|---:|---:|---:|---|
+| Current LLVC Q8 High | 7.90 MB | **0.326** | one fixed target | causal ONNX; suitable |
+| MeanVC FP32 | **2.745 GB** | 0.393 | 0.358–0.435 | fast once loaded, but PyTorch/multi-GB |
+| OpenVoice V2 Q8 | 43.12 MB | 1.274 | 1.247–1.322 | slower than real time natively |
+| FAcodec Q8 | 69.31 MB | 4.440 | 4.265–4.643 | far slower than real time |
+
+MeanVC's advertised four-file checkpoint bundle is 237.82 MB, but official
+inference also requires a 1.302 GB WavLM speaker-verifier checkpoint and a
+1.262 GB WavLM backbone. Its real runtime artifact footprint is therefore
+2.745 GB. A temporary compatibility change removed unused training-only imports
+from `src/model/__init__.py`; model math and checkpoints were not changed.
+
+### Automatic quality screen
+
+Speaker similarity uses an independent Resemblyzer GE2E encoder. Intelligibility
+uses faster-whisper `base.en` CPU INT8 against the known source transcript.
+
+| Model | Voices | Mean speaker cosine ↑ | Mean WER ↓ |
+|---|---:|---:|---:|
+| Current LLVC Q8 High | 1 | **0.870** | **0.000** |
+| MeanVC FP32 | 3 | 0.814 | 0.144 |
+| OpenVoice V2 Q8 | 3 | 0.796 | 0.018 |
+| FAcodec Q8 | 3 | 0.795 | 0.027 |
+
+MeanVC had the best average zero-shot speaker score but materially damaged
+words on two targets (WER 0.189). OpenVoice preserved content best among the
+zero-shot models. FAcodec did not justify its roughly 3.5x slowdown versus
+OpenVoice. These automatic metrics are not MOS; all ten WAV files are retained
+under `public/audio/model-comparison/outputs/` for listening.
+
+### Browser control
+
+The current Q8 High model completed 250 stateful chunks in the isolated,
+8-thread in-app Chromium WASM runtime: 7.01 ms average, 9.98 ms p99, 11.93 ms
+maximum, finite non-silent output. The 13 ms audio quantum therefore has about
+6 ms average compute headroom in this clean run.
+
+Neither zero-shot ONNX candidate was moved into the live worklet: both are
+whole-file, non-causal pipelines, and both already miss real time in optimized
+native ONNX. MeanVC is causal/chunked internally but its multi-GB PyTorch/WavLM
+pipeline is not a web-deployable replacement.
+
+### Decision
+
+- Keep Q8 High LLVC as the live browser default.
+- If selectable arbitrary target voices are required, expose OpenVoice Q8 as an
+  offline render mode, subject to human listening and license review.
+- Keep MeanVC as a native/server quality experiment; it is not a browser asset.
+- Reject FAcodec Q8 for this Mac/browser use case.
+
+Evidence:
+
+- `reports/voice-model-benchmark.json`
+- `reports/meanvc-benchmark.json`
+- `reports/voice-model-quality.json`
+- `reports/voice-model-browser-control.json`
+- Listening matrix: `public/audio/model-comparison/README.md`

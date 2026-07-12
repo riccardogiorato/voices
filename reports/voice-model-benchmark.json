@@ -1,0 +1,166 @@
+{
+  "generatedAt": "2026-07-13T00:53:41+02:00",
+  "source": "public/audio/short-unseen-tests/english-samantha.wav",
+  "sourceAudio": {
+    "durationSeconds": 13.067458333333333,
+    "sampleRate": 24000,
+    "channels": 1,
+    "peak": 0.81207275390625,
+    "rms": 0.1676529496908188,
+    "finite": true
+  },
+  "targets": {
+    "lj-speech": "public/audio/model-comparison/references/lj-speech-linda-johnson.wav",
+    "cmu-rms": "public/audio/model-comparison/references/cmu-arctic-rms.wav",
+    "llvc-target": "public/audio/model-comparison/references/llvc-fixed-target.wav"
+  },
+  "method": {
+    "networkDownloadsExcluded": true,
+    "zeroShotOrder": [
+      "lj-speech",
+      "cmu-rms",
+      "llvc-target"
+    ],
+    "note": "First zero-shot conversion includes lazy ONNX session creation; following conversions reuse sessions."
+  },
+  "models": {
+    "openvoice-q8": {
+      "precision": "INT8/Q8 ONNX",
+      "constructorSeconds": 5.583999154623598e-06,
+      "cachedModelBytes": 43119929,
+      "runs": [
+        {
+          "target": "lj-speech",
+          "reference": "public/audio/model-comparison/references/lj-speech-linda-johnson.wav",
+          "output": "public/audio/model-comparison/outputs/openvoice-q8-lj-speech.wav",
+          "mode": "cold-session",
+          "wallSeconds": 17.262204499998916,
+          "rtf": 1.3216375320311669,
+          "audio": {
+            "durationSeconds": 13.061224489795919,
+            "sampleRate": 22050,
+            "channels": 1,
+            "peak": 0.686492919921875,
+            "rms": 0.1310541033744812,
+            "finite": true
+          }
+        },
+        {
+          "target": "cmu-rms",
+          "reference": "public/audio/model-comparison/references/cmu-arctic-rms.wav",
+          "output": "public/audio/model-comparison/outputs/openvoice-q8-cmu-rms.wav",
+          "mode": "warm-session",
+          "wallSeconds": 16.370753875002265,
+          "rtf": 1.2533858435548608,
+          "audio": {
+            "durationSeconds": 13.061224489795919,
+            "sampleRate": 22050,
+            "channels": 1,
+            "peak": 0.82293701171875,
+            "rms": 0.14137694239616394,
+            "finite": true
+          }
+        },
+        {
+          "target": "llvc-target",
+          "reference": "public/audio/model-comparison/references/llvc-fixed-target.wav",
+          "output": "public/audio/model-comparison/outputs/openvoice-q8-llvc-target.wav",
+          "mode": "warm-session",
+          "wallSeconds": 16.282687167000404,
+          "rtf": 1.2466432362234683,
+          "audio": {
+            "durationSeconds": 13.061224489795919,
+            "sampleRate": 22050,
+            "channels": 1,
+            "peak": 0.756683349609375,
+            "rms": 0.15952430665493011,
+            "finite": true
+          }
+        }
+      ]
+    },
+    "facodec-q8": {
+      "precision": "INT8/Q8 ONNX",
+      "constructorSeconds": 4.283399903215468e-05,
+      "cachedModelBytes": 69305505,
+      "runs": [
+        {
+          "target": "lj-speech",
+          "reference": "public/audio/model-comparison/references/lj-speech-linda-johnson.wav",
+          "output": "public/audio/model-comparison/outputs/facodec-q8-lj-speech.wav",
+          "mode": "cold-session",
+          "wallSeconds": 57.64342008300082,
+          "rtf": 4.4128934034833165,
+          "audio": {
+            "durationSeconds": 13.0625,
+            "sampleRate": 16000,
+            "channels": 1,
+            "peak": 0.541290283203125,
+            "rms": 0.09539411962032318,
+            "finite": true
+          }
+        },
+        {
+          "target": "cmu-rms",
+          "reference": "public/audio/model-comparison/references/cmu-arctic-rms.wav",
+          "output": "public/audio/model-comparison/outputs/facodec-q8-cmu-rms.wav",
+          "mode": "warm-session",
+          "wallSeconds": 60.64634958299939,
+          "rtf": 4.6427827431961255,
+          "audio": {
+            "durationSeconds": 13.0625,
+            "sampleRate": 16000,
+            "channels": 1,
+            "peak": 0.446258544921875,
+            "rms": 0.07422656565904617,
+            "finite": true
+          }
+        },
+        {
+          "target": "llvc-target",
+          "reference": "public/audio/model-comparison/references/llvc-fixed-target.wav",
+          "output": "public/audio/model-comparison/outputs/facodec-q8-llvc-target.wav",
+          "mode": "warm-session",
+          "wallSeconds": 55.70912916699672,
+          "rtf": 4.26481371613372,
+          "audio": {
+            "durationSeconds": 13.0625,
+            "sampleRate": 16000,
+            "channels": 1,
+            "peak": 0.3101806640625,
+            "rms": 0.06475050002336502,
+            "finite": true
+          }
+        }
+      ]
+    },
+    "llvc-q8-high": {
+      "precision": "static INT8 weights/activations with retained sensitive FP32 nodes",
+      "targetMode": "fixed any-to-one; other targets require training",
+      "runs": [
+        {
+          "target": "llvc-target",
+          "output": "public/audio/model-comparison/outputs/llvc-q8-high-llvc-target.wav",
+          "sessionSeconds": 0.07915095899807056,
+          "inferenceSeconds": 4.255120416000864,
+          "rtf": 0.32568851251441744,
+          "chunkTimingMs": {
+            "average": 4.212134185065985,
+            "p99": 6.234072278894019,
+            "maximum": 9.840500002610497
+          },
+          "audio": {
+            "durationSeconds": 13.065,
+            "sampleRate": 16000,
+            "channels": 1,
+            "peak": 0.284637451171875,
+            "rms": 0.06903587281703949,
+            "finite": true
+          },
+          "modelBytes": 7898345
+        }
+      ]
+    }
+  },
+  "peakProcessRssBytes": 1195786240
+}

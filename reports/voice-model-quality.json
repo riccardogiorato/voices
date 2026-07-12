@@ -1,0 +1,125 @@
+{
+  "generatedAt": "2026-07-13T01:01:41+02:00",
+  "method": {
+    "speakerEvaluator": "Resemblyzer 0.1.4, independent GE2E speaker encoder",
+    "asrEvaluator": "faster-whisper base.en, CPU INT8, beam size 5",
+    "expectedTranscript": "On Thursday morning, the research team carried a small recorder across the quiet harbor. They compared each signal carefully, noted the changing wind, and repeated the final sentence twice so the experiment would remain clear and useful.",
+    "sourceAsrTranscript": "On Thursday morning, the research team carried a small recorder across the quiet harbour, they compared each signal carefully, noted the changing wind, and repeated the final sentence twice so the experiment would remain clear and useful.",
+    "sourceAsrWordErrorRate": 0.02702702702702703,
+    "warning": "Automatic metrics are screening signals, not a substitute for human MOS/listening tests."
+  },
+  "results": [
+    {
+      "model": "facodec-q8",
+      "target": "cmu-rms",
+      "output": "public/audio/model-comparison/outputs/facodec-q8-cmu-rms.wav",
+      "speakerCosineSimilarity": 0.8011014461517334,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor. They compared each signal carefully, noted the changing wind, and repeated the final sentmus twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.02702702702702703,
+      "durationSeconds": 13.0625
+    },
+    {
+      "model": "facodec-q8",
+      "target": "lj-speech",
+      "output": "public/audio/model-comparison/outputs/facodec-q8-lj-speech.wav",
+      "speakerCosineSimilarity": 0.8038597106933594,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor. They compared each signal carefully, noted the changing wind, and repeated the final sentiments twice, so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.02702702702702703,
+      "durationSeconds": 13.0625
+    },
+    {
+      "model": "facodec-q8",
+      "target": "llvc-target",
+      "output": "public/audio/model-comparison/outputs/facodec-q8-llvc-target.wav",
+      "speakerCosineSimilarity": 0.779516339302063,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor. They compared each signal carefully, noted the changing wind, and repeated the final sentmus twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.02702702702702703,
+      "durationSeconds": 13.0625
+    },
+    {
+      "model": "llvc-q8-high",
+      "target": "llvc-target",
+      "output": "public/audio/model-comparison/outputs/llvc-q8-high-llvc-target.wav",
+      "speakerCosineSimilarity": 0.8701401948928833,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor, they compared each signal carefully, noted the changing wind, and repeated the final sentence twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.0,
+      "durationSeconds": 13.065
+    },
+    {
+      "model": "meanvc",
+      "target": "cmu-rms",
+      "output": "public/audio/model-comparison/outputs/meanvc-cmu-rms.wav",
+      "speakerCosineSimilarity": 0.8493995666503906,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the client harbor. They compared each signal carefully, noted the change in wind, and we deleted the final send much twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.1891891891891892,
+      "durationSeconds": 13.03
+    },
+    {
+      "model": "meanvc",
+      "target": "lj-speech",
+      "output": "public/audio/model-comparison/outputs/meanvc-lj-speech.wav",
+      "speakerCosineSimilarity": 0.7934327125549316,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor. They compared each signal carefully, noted the changing wind, and we did the final sentence twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.05405405405405406,
+      "durationSeconds": 13.03
+    },
+    {
+      "model": "meanvc",
+      "target": "llvc-target",
+      "output": "public/audio/model-comparison/outputs/meanvc-llvc-target.wav",
+      "speakerCosineSimilarity": 0.7976903915405273,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor. They compared it to sigma cars only, noted the changing wind, and we did the final sentence twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.1891891891891892,
+      "durationSeconds": 13.03
+    },
+    {
+      "model": "openvoice-q8",
+      "target": "cmu-rms",
+      "output": "public/audio/model-comparison/outputs/openvoice-q8-cmu-rms.wav",
+      "speakerCosineSimilarity": 0.8064769506454468,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor, they compared each signal carefully, noted the changing win, and repeated the final sentence twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.02702702702702703,
+      "durationSeconds": 13.06125
+    },
+    {
+      "model": "openvoice-q8",
+      "target": "lj-speech",
+      "output": "public/audio/model-comparison/outputs/openvoice-q8-lj-speech.wav",
+      "speakerCosineSimilarity": 0.7626005411148071,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor. They compared each signal carefully, noted the changing win, and repeated the final sentence twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.02702702702702703,
+      "durationSeconds": 13.06125
+    },
+    {
+      "model": "openvoice-q8",
+      "target": "llvc-target",
+      "output": "public/audio/model-comparison/outputs/openvoice-q8-llvc-target.wav",
+      "speakerCosineSimilarity": 0.8190082311630249,
+      "transcript": "On Thursday morning, the research team carried a small recorder across the quiet harbor. They compared each signal carefully, noted the changing wind, and repeated the final sentence twice so the experiment would remain clear and useful.",
+      "wordErrorRate": 0.0,
+      "durationSeconds": 13.06125
+    }
+  ],
+  "aggregates": {
+    "facodec-q8": {
+      "voices": 3,
+      "meanSpeakerCosineSimilarity": 0.7948258320490519,
+      "meanWordErrorRate": 0.02702702702702703
+    },
+    "llvc-q8-high": {
+      "voices": 1,
+      "meanSpeakerCosineSimilarity": 0.8701401948928833,
+      "meanWordErrorRate": 0.0
+    },
+    "meanvc": {
+      "voices": 3,
+      "meanSpeakerCosineSimilarity": 0.8135075569152832,
+      "meanWordErrorRate": 0.14414414414414414
+    },
+    "openvoice-q8": {
+      "voices": 3,
+      "meanSpeakerCosineSimilarity": 0.7960285743077596,
+      "meanWordErrorRate": 0.018018018018018018
+    }
+  }
+}

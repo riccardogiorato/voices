@@ -18,7 +18,7 @@ const SAMPLES = [
 const MODEL_OPTIONS = [
   { id: 'current', label: 'Original FP32', note: 'Reference quality' },
   { id: 'q8-high', label: 'Q8 High', note: 'Recommended' },
-  { id: 'q8-max', label: 'Q8 Max', note: 'Smallest / fastest' },
+  { id: 'q8-max', label: 'Q8 Max', note: 'Experimental / fastest' },
 ] as const
 
 type AudioEngine = {

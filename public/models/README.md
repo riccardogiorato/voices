@@ -6,7 +6,10 @@
 teacher's complete 512/256 architecture and learned weights, but applies static
 8-bit post-training quantization to the eight dominant 512×512 pointwise
 convolutions. `common-voice-llvc-q8-max.onnx` quantizes every supported Conv,
-MatMul, and Gemm operation for a smaller, faster, lower-fidelity alternative.
+MatMul, and Gemm operation for a smaller, faster, experimental alternative.
+Q8 Max can degrade sharply on inputs outside its calibration distribution (an
+unseen Italian/Flo test measured 0.818 waveform correlation); it is exposed for
+comparison, not recommended as the production-quality default.
 Neither variant was trained or fine-tuned. The original FP32 graph remains the
 reference and all three are selectable in the web app.
 

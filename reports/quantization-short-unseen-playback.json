@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-07-12T21:20:01.378Z",
+  "results": [
+    {
+      "sample": "english-samantha",
+      "model": "current",
+      "threads": 2,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 2t · avg 5.9ms · p99 8ms · max 15ms · queue 0 · buffer 97ms · underruns 0"
+    },
+    {
+      "sample": "english-samantha",
+      "model": "q8-high",
+      "threads": 4,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 4t · avg 5.7ms · p99 6ms · max 10ms · queue 0 · buffer 102ms · underruns 0"
+    },
+    {
+      "sample": "english-samantha",
+      "model": "q8-max",
+      "threads": 4,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 4t · avg 5.0ms · p99 6ms · max 8ms · queue 0 · buffer 102ms · underruns 0"
+    },
+    {
+      "sample": "french-jacques",
+      "model": "current",
+      "threads": 2,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 2t · avg 5.9ms · p99 7ms · max 7ms · queue 0 · buffer 102ms · underruns 0"
+    },
+    {
+      "sample": "french-jacques",
+      "model": "q8-high",
+      "threads": 4,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 4t · avg 5.8ms · p99 12ms · max 36ms · queue 0 · buffer 97ms · underruns 0"
+    },
+    {
+      "sample": "french-jacques",
+      "model": "q8-max",
+      "threads": 4,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 4t · avg 5.0ms · p99 7ms · max 11ms · queue 0 · buffer 97ms · underruns 0"
+    },
+    {
+      "sample": "italian-flo",
+      "model": "current",
+      "threads": 2,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 2t · avg 5.9ms · p99 6ms · max 10ms · queue 0 · buffer 97ms · underruns 0"
+    },
+    {
+      "sample": "italian-flo",
+      "model": "q8-high",
+      "threads": 4,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 4t · avg 5.7ms · p99 6ms · max 14ms · queue 0 · buffer 97ms · underruns 0"
+    },
+    {
+      "sample": "italian-flo",
+      "model": "q8-max",
+      "threads": 4,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 4t · avg 5.0ms · p99 6ms · max 19ms · queue 0 · buffer 97ms · underruns 0"
+    },
+    {
+      "sample": "spanish-grandma",
+      "model": "current",
+      "threads": 2,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 2t · avg 5.9ms · p99 6ms · max 8ms · queue 0 · buffer 97ms · underruns 0"
+    },
+    {
+      "sample": "spanish-grandma",
+      "model": "q8-high",
+      "threads": 4,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 4t · avg 5.7ms · p99 18ms · max 35ms · queue 0 · buffer 97ms · underruns 0"
+    },
+    {
+      "sample": "spanish-grandma",
+      "model": "q8-max",
+      "threads": 4,
+      "seconds": 12,
+      "status": "Runtime: WASM · iso 4t · avg 5.0ms · p99 6ms · max 8ms · queue 0 · buffer 102ms · underruns 0"
+    }
+  ]
+}

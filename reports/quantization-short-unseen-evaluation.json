@@ -1,0 +1,362 @@
+{
+  "generatedAt": "2026-07-12T23:05:13+02:00",
+  "method": {
+    "training": false,
+    "reference": "Original FP32 teacher, stateful 208-sample chunks at 16 kHz",
+    "sampleCount": 4,
+    "categories": {
+      "short-unseen": 4
+    },
+    "qualityReference": "Each variant compared sample-for-sample with FP32 output"
+  },
+  "models": {
+    "fp32": {
+      "path": "public/models/common-voice-llvc.onnx",
+      "size": {
+        "bytes": 14189465,
+        "megabytes": 14.189465,
+        "fractionOfFp32": 1.0
+      },
+      "samples": [
+        {
+          "sample": "english-samantha",
+          "category": "short-unseen",
+          "durationSeconds": 13.0675,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 150.07688903808594,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.2812354862689972,
+            "rms": 0.06977987289428711,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.872023060637097,
+            "p99Ms": 13.813390322611696,
+            "maxMs": 59.99587499900372,
+            "chunks": 1005
+          }
+        },
+        {
+          "sample": "french-jacques",
+          "category": "short-unseen",
+          "durationSeconds": 13.98275,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 148.2644500732422,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.33618471026420593,
+            "rms": 0.05476295202970505,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.907402935801318,
+            "p99Ms": 10.07442042027833,
+            "maxMs": 18.59054099986679,
+            "chunks": 1075
+          }
+        },
+        {
+          "sample": "italian-flo",
+          "category": "short-unseen",
+          "durationSeconds": 14.8943125,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 0.9999999999999998,
+            "snrDb": 150.0745391845703,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.3176000118255615,
+            "rms": 0.06535708159208298,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.898127292556634,
+            "p99Ms": 9.65500007965601,
+            "maxMs": 15.926165997370845,
+            "chunks": 1145
+          }
+        },
+        {
+          "sample": "spanish-grandma",
+          "category": "short-unseen",
+          "durationSeconds": 13.918625,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 147.56507873535156,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.21616263687610626,
+            "rms": 0.050644248723983765,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 6.6138183392671905,
+            "p99Ms": 16.607387269395982,
+            "maxMs": 23.63320899894461,
+            "chunks": 1070
+          }
+        }
+      ],
+      "aggregate": {
+        "short-unseen": {
+          "mae": 0.0,
+          "mse": 0.0,
+          "correlation": 1.0,
+          "snrDb": 148.9952392578125,
+          "spectralError": 0.0,
+          "logMagnitudeError": 0.0
+        },
+        "all": {
+          "mae": 0.0,
+          "mse": 0.0,
+          "correlation": 1.0,
+          "snrDb": 148.9952392578125,
+          "spectralError": 0.0,
+          "logMagnitudeError": 0.0
+        }
+      }
+    },
+    "q8-high": {
+      "path": "public/models/common-voice-llvc-q8-high.onnx",
+      "size": {
+        "bytes": 7898345,
+        "megabytes": 7.898345,
+        "fractionOfFp32": 0.5566344467532779
+      },
+      "samples": [
+        {
+          "sample": "english-samantha",
+          "category": "short-unseen",
+          "durationSeconds": 13.0675,
+          "quality": {
+            "mae": 0.0029321196489036083,
+            "mse": 2.8237382139195688e-05,
+            "correlation": 0.9971252178563987,
+            "snrDb": 22.36635971069336,
+            "spectralError": 0.051751526104279494,
+            "logMagnitudeError": 0.020759559244659612,
+            "peak": 0.2846643924713135,
+            "rms": 0.06904855370521545,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.504987709436638,
+            "p99Ms": 9.819463042513236,
+            "maxMs": 24.709290999453515,
+            "chunks": 1005
+          }
+        },
+        {
+          "sample": "french-jacques",
+          "category": "short-unseen",
+          "durationSeconds": 13.98275,
+          "quality": {
+            "mae": 0.0015064530307427049,
+            "mse": 6.169550943013746e-06,
+            "correlation": 0.998975736501566,
+            "snrDb": 26.86720085144043,
+            "spectralError": 0.03126154180698063,
+            "logMagnitudeError": 0.020330443251182773,
+            "peak": 0.3032943904399872,
+            "rms": 0.05453607067465782,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.596086322780033,
+            "p99Ms": 10.218134341121184,
+            "maxMs": 13.418750000710133,
+            "chunks": 1075
+          }
+        },
+        {
+          "sample": "italian-flo",
+          "category": "short-unseen",
+          "durationSeconds": 14.8943125,
+          "quality": {
+            "mae": 0.0030761403031647205,
+            "mse": 3.6314810131443664e-05,
+            "correlation": 0.9957997651578111,
+            "snrDb": 20.705015182495117,
+            "spectralError": 0.06590460546023129,
+            "logMagnitudeError": 0.023062588269033988,
+            "peak": 0.31613442301750183,
+            "rms": 0.06437033414840698,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.261095635869742,
+            "p99Ms": 8.654947998729766,
+            "maxMs": 15.990125000826083,
+            "chunks": 1145
+          }
+        },
+        {
+          "sample": "spanish-grandma",
+          "category": "short-unseen",
+          "durationSeconds": 13.918625,
+          "quality": {
+            "mae": 0.001648857956752181,
+            "mse": 6.994312570896e-06,
+            "correlation": 0.9986424353015062,
+            "snrDb": 25.64315414428711,
+            "spectralError": 0.03588040742289526,
+            "logMagnitudeError": 0.019963340087002675,
+            "peak": 0.22388094663619995,
+            "rms": 0.05038801580667496,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.605476445784449,
+            "p99Ms": 9.617678958093164,
+            "maxMs": 17.600249997485662,
+            "chunks": 1070
+          }
+        }
+      ],
+      "aggregate": {
+        "short-unseen": {
+          "mae": 0.0022908927348908037,
+          "mse": 1.9429013946137275e-05,
+          "correlation": 0.9976357887043206,
+          "snrDb": 23.895432472229004,
+          "spectralError": 0.04619952019859667,
+          "logMagnitudeError": 0.02102898271296976
+        },
+        "all": {
+          "mae": 0.0022908927348908037,
+          "mse": 1.9429013946137275e-05,
+          "correlation": 0.9976357887043206,
+          "snrDb": 23.895432472229004,
+          "spectralError": 0.04619952019859667,
+          "logMagnitudeError": 0.02102898271296976
+        }
+      }
+    },
+    "q8-max": {
+      "path": "public/models/common-voice-llvc-q8-max.onnx",
+      "size": {
+        "bytes": 5793582,
+        "megabytes": 5.793582,
+        "fractionOfFp32": 0.4083016519650318
+      },
+      "samples": [
+        {
+          "sample": "english-samantha",
+          "category": "short-unseen",
+          "durationSeconds": 13.0675,
+          "quality": {
+            "mae": 0.012797446921467781,
+            "mse": 0.000433492154115811,
+            "correlation": 0.9546663605535054,
+            "snrDb": 10.504791259765625,
+            "spectralError": 0.21515341734420673,
+            "logMagnitudeError": 0.12454697241153911,
+            "peak": 0.26692405343055725,
+            "rms": 0.06519665569067001,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.6852329213720103,
+            "p99Ms": 7.001119680644481,
+            "maxMs": 13.912250000430504,
+            "chunks": 1005
+          }
+        },
+        {
+          "sample": "french-jacques",
+          "category": "short-unseen",
+          "durationSeconds": 13.98275,
+          "quality": {
+            "mae": 0.007575877942144871,
+            "mse": 0.00014063995331525803,
+            "correlation": 0.9765922067545665,
+            "snrDb": 13.288650512695312,
+            "spectralError": 0.15592713909490666,
+            "logMagnitudeError": 0.11439705689082129,
+            "peak": 0.28326547145843506,
+            "rms": 0.05210844427347183,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.706826419443661,
+            "p99Ms": 7.523216920235426,
+            "maxMs": 11.05795900002704,
+            "chunks": 1075
+          }
+        },
+        {
+          "sample": "italian-flo",
+          "category": "short-unseen",
+          "durationSeconds": 14.8943125,
+          "quality": {
+            "mae": 0.01982528530061245,
+            "mse": 0.001428804243914783,
+            "correlation": 0.8176534830753907,
+            "snrDb": 4.756125450134277,
+            "spectralError": 0.4192382309882448,
+            "logMagnitudeError": 0.1289671862181905,
+            "peak": 0.2841625213623047,
+            "rms": 0.05704927444458008,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.03145310302419,
+            "p99Ms": 7.7031634403101625,
+            "maxMs": 14.314457999716979,
+            "chunks": 1145
+          }
+        },
+        {
+          "sample": "spanish-grandma",
+          "category": "short-unseen",
+          "durationSeconds": 13.918625,
+          "quality": {
+            "mae": 0.008143123239278793,
+            "mse": 0.0001506987464381382,
+            "correlation": 0.9706351398786333,
+            "snrDb": 12.309507369995117,
+            "spectralError": 0.1758718702853663,
+            "logMagnitudeError": 0.10099519862598662,
+            "peak": 0.19882343709468842,
+            "rms": 0.0476483553647995,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.8682615634970037,
+            "p99Ms": 6.942973541481473,
+            "maxMs": 11.993041000096127,
+            "chunks": 1070
+          }
+        }
+      ],
+      "aggregate": {
+        "short-unseen": {
+          "mae": 0.012085433350875974,
+          "mse": 0.0005384087744459976,
+          "correlation": 0.929886797565524,
+          "snrDb": 10.214768648147583,
+          "spectralError": 0.24154766442818115,
+          "logMagnitudeError": 0.11722660353663439
+        },
+        "all": {
+          "mae": 0.012085433350875974,
+          "mse": 0.0005384087744459976,
+          "correlation": 0.929886797565524,
+          "snrDb": 10.214768648147583,
+          "spectralError": 0.24154766442818115,
+          "logMagnitudeError": 0.11722660353663439
+        }
+      }
+    }
+  }
+}

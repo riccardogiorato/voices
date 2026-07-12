@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Render the original teacher and the two selected PTQ variants for listening."""
 
+import argparse
 import importlib.util
 import tempfile
 import wave
@@ -27,15 +28,21 @@ def write_wav(path, audio):
 
 
 def main():
-    OUTPUT.mkdir(parents=True, exist_ok=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--sample-dir", default="public/audio/long-tests")
+    parser.add_argument("--output-dir", default=str(OUTPUT.relative_to(ROOT)))
+    args = parser.parse_args()
+    sample_dir = ROOT / args.sample_dir
+    output_dir = ROOT / args.output_dir
+    output_dir.mkdir(parents=True, exist_ok=True)
     models = {name: evaluation.session(evaluation.MODELS[name]) for name in SELECTED}
     with tempfile.TemporaryDirectory() as temporary:
         temporary = Path(temporary)
-        for sample in sorted(evaluation.LONG_DIR.glob("*.wav")):
+        for sample in sorted(sample_dir.glob("*.wav")):
             audio = evaluation.decode(sample, temporary / f"{sample.stem}.f32")
             for name, model in models.items():
                 converted, _ = evaluation.convert(model, audio)
-                path = OUTPUT / f"{sample.stem}-{name}.wav"
+                path = output_dir / f"{sample.stem}-{name}.wav"
                 write_wav(path, converted)
                 print(f"Wrote {path.relative_to(ROOT)}")
 

@@ -55,7 +55,7 @@ try {
     pending.set(messageId, resolve)
     socket.send(JSON.stringify({ id: messageId, method, params }))
   })
-  const evaluate = async (expression) => (await send('Runtime.evaluate', { expression, returnByValue: true })).result?.result?.value
+  const evaluate = async (expression) => (await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true })).result?.result?.value
   const click = async (expression) => {
     const clicked = await evaluate(`(() => { const e = ${expression}; if (!e) return false; e.click(); return true; })()`)
     if (!clicked) throw new Error(`Playback control not found: ${expression}`)
@@ -77,18 +77,20 @@ try {
     await delay(100)
   }
   if (samplePath) {
-    const started = await evaluate(`(() => { const audio=document.querySelector('audio'); if (!audio) return false; audio.src=${JSON.stringify(samplePath)}; audio.load(); void audio.play(); return true; })()`)
-    if (!started) throw new Error('Audio element was not available')
+    const started = await evaluate(`(async () => { const audio=document.querySelector('audio'); if (!audio) return {ok:false}; audio.src=${JSON.stringify(samplePath)}; audio.load(); try { await audio.play(); return {ok:true,duration:audio.duration}; } catch (error) { return {ok:false,error:String(error)}; } })()`)
+    if (!started?.ok) throw new Error(`Audio playback did not start: ${JSON.stringify(started)}`)
   } else {
     await click(`[...document.querySelectorAll('[role="option"]')].find(e => e.textContent.includes('English'))`)
   }
   await delay(playbackSeconds * 1000)
+  const playback = await evaluate(`(() => { const audio=document.querySelector('audio'); return audio ? {currentTime:audio.currentTime,duration:audio.duration,paused:audio.paused,ended:audio.ended,readyState:audio.readyState,error:audio.error?.message} : null; })()`)
   const status = await evaluate(`document.querySelector('.mode-status.neural small')?.textContent || ''`)
   socket.close()
   console.log(status)
   const average = Number(status.match(/avg ([\d.]+)ms/)?.[1])
   const buffer = Number(status.match(/buffer ([\d.]+)ms/)?.[1])
   const underruns = Number(status.match(/underruns (\d+)/)?.[1])
+  if (!playback || playback.currentTime < Math.min(3, playbackSeconds / 2)) throw new Error(`Audio did not advance: ${JSON.stringify(playback)}`)
   if (!status.includes(`iso ${threads}t`)) throw new Error(`Expected isolated ${threads}-thread WASM: ${status}`)
   if (!(average <= maxAverageMs)) throw new Error(`Playback average ${average}ms exceeds ${maxAverageMs}ms`)
   if (!(buffer >= 70)) throw new Error(`Playback buffer drained to ${buffer}ms`)

@@ -124,14 +124,26 @@ def aggregate(samples, category):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="reports/quantization-evaluation.json")
+    parser.add_argument("--sample-dir", help="Evaluate only WAV files in this directory as short-unseen")
+    parser.add_argument("--sample-pattern", default="*.wav", help="Glob used with --sample-dir")
+    parser.add_argument("--models", default=",".join(MODELS), help="Comma-separated model names; fp32 must be included")
     args = parser.parse_args()
-    loaded = {name: session(path) for name, path in MODELS.items()}
-    results = {name: [] for name in MODELS}
+    model_names = args.models.split(",")
+    if "fp32" not in model_names or any(name not in MODELS for name in model_names):
+        raise SystemExit(f"Models must include fp32 and use: {', '.join(MODELS)}")
+    selected_models = {name: MODELS[name] for name in model_names}
+    samples = SAMPLES if not args.sample_dir else [
+        ("short-unseen", path) for path in sorted((ROOT / args.sample_dir).glob(args.sample_pattern))
+    ]
+    if not samples:
+        raise SystemExit("No WAV samples found")
+    loaded = {name: session(path) for name, path in selected_models.items()}
+    results = {name: [] for name in selected_models}
     with tempfile.TemporaryDirectory() as temporary:
         temporary = Path(temporary)
-        for sample_index, (category, sample) in enumerate(SAMPLES, 1):
+        for sample_index, (category, sample) in enumerate(samples, 1):
             audio = decode(sample, temporary / f"{sample_index}.f32")
-            print(f"[{sample_index}/{len(SAMPLES)}] {category}/{sample.name}: {len(audio) / 16000:.2f}s", flush=True)
+            print(f"[{sample_index}/{len(samples)}] {category}/{sample.name}: {len(audio) / 16000:.2f}s", flush=True)
             outputs = {}
             for name, model in loaded.items():
                 converted, times = convert(model, audio)
@@ -146,20 +158,19 @@ def main():
                 })
                 print(f"  {name:12} avg={np.mean(times):6.3f}ms corr={quality['correlation']:.6f} snr={quality['snrDb']:7.2f}dB", flush=True)
 
-    reference_bytes = model_size("fp32", MODELS["fp32"])["bytes"]
+    reference_bytes = model_size("fp32", selected_models["fp32"])["bytes"]
     report = {
         "generatedAt": datetime.now().astimezone().isoformat(timespec="seconds"),
         "method": {
             "training": False,
             "reference": "Original FP32 teacher, stateful 208-sample chunks at 16 kHz",
-            "sampleCount": len(SAMPLES),
-            "bundledCount": sum(category == "bundled" for category, _ in SAMPLES),
-            "longUnseenCount": sum(category == "long-unseen" for category, _ in SAMPLES),
+            "sampleCount": len(samples),
+            "categories": {category: sum(value == category for value, _ in samples) for category in sorted({value for value, _ in samples})},
             "qualityReference": "Each variant compared sample-for-sample with FP32 output",
         },
         "models": {},
     }
-    for name, path in MODELS.items():
+    for name, path in selected_models.items():
         size = model_size(name, path)
         report["models"][name] = {
             "path": str(path.relative_to(ROOT)),
@@ -167,7 +178,7 @@ def main():
             "samples": results[name],
             "aggregate": {
                 category: aggregate(results[name], category)
-                for category in ("bundled", "long-unseen", "all")
+                for category in (*sorted({value for value, _ in samples}), "all")
             },
         }
     output = ROOT / args.output

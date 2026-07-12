@@ -745,3 +745,58 @@ can satisfy both targets.
 Machine-readable evidence is stored in `reports/quantization-evaluation.json`,
 `reports/quantization-chrome-benchmark.json`, and
 `reports/quantization-playback-test.json`.
+
+---
+
+## 15. Additional unseen ~15-second validation (2026-07-12)
+
+**Recorded:** 2026-07-12 23:20 CEST
+
+Four new macOS TTS inputs were generated from new text and speaker combinations
+that were absent from calibration and earlier evaluation:
+
+| Input | Voice | Duration |
+|---|---|---:|
+| English | Samantha (`en_US`) | 13.07 s |
+| French | Jacques (`fr_FR`) | 13.98 s |
+| Italian | Flo (`it_IT`) | 14.89 s |
+| Spanish | Grandma (`es_ES`) | 13.92 s |
+
+`scripts/generate-short-unseen-samples.py` records the exact voices, speaking
+rates, and text. `scripts/evaluate-model-variants.py` streamed each file through
+FP32, Q8 High, and Q8 Max with recurrent state and compared outputs sample for
+sample against FP32.
+
+| Input | Q8 High corr ↑ | Q8 High SNR ↑ | Q8 Max corr ↑ | Q8 Max SNR ↑ |
+|---|---:|---:|---:|---:|
+| English / Samantha | 0.99713 | 22.37 dB | 0.95467 | 10.50 dB |
+| French / Jacques | 0.99898 | 26.87 dB | 0.97659 | 13.29 dB |
+| Italian / Flo | 0.99580 | 20.71 dB | **0.81765** | **4.76 dB** |
+| Spanish / Grandma | 0.99864 | 25.64 dB | 0.97064 | 12.31 dB |
+| **Mean** | **0.99764** | **23.90 dB** | **0.92989** | **10.21 dB** |
+
+The Italian/Flo Q8 Max result was repeated twice in separate processes and
+returned exactly the same quality metrics both times. This rules out transient
+or non-finite runtime corruption and demonstrates an input-distribution
+sensitivity caused by aggressively quantizing every supported convolution and
+linear operation. Q8 High remains the safe default; Q8 Max is now explicitly
+labelled experimental in the UI.
+
+The real Chrome matrix exercised all 12 input/model combinations for 12 seconds
+each. FP32 averaged 5.9 ms, Q8 High 5.7–5.8 ms, and Q8 Max 5.0 ms. Every run had
+queue 0, 97–102 ms buffered, and zero underruns. Thus the Q8 Max finding is an
+output-quality failure, not a real-time playback failure.
+
+During the first Chrome attempt, three stale workspace ONNX benchmark processes
+were discovered consuming roughly three full CPU cores for more than 11 hours.
+They were terminated. Before termination, a control playback regressed to
+17.8–25.6 ms with buffer drain/underruns; afterward the identical control
+returned to 5.9 ms, ~100 ms buffered, and zero underruns. This external CPU load
+was a concrete source of previously observed MacBook/Chrome performance
+instability and must be excluded from future benchmark runs.
+
+Evidence:
+
+- `reports/quantization-short-unseen-evaluation.json`
+- `reports/quantization-short-unseen-playback.json`
+- Listening WAVs: `public/audio/short-unseen-comparison/`

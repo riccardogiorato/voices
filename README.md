@@ -7,7 +7,7 @@ The app includes five 20–30 second samples generated with Together AI's `carte
 Voice modes:
 
 - **Common Voice Lite** uses Web Audio EQ, dynamics normalization, saturation, and limiting with near-zero latency.
-- **Common Voice Neural** runs a browser-exported LLVC any-to-one model through ONNX Runtime Web. It prefers WebGPU and falls back to WASM.
+- **Common Voice Neural** runs a compact distilled LLVC any-to-one model through two-threaded ONNX Runtime Web WASM.
 - **Original** disables processing and plays the source sample unchanged.
 
 The neural model preloads when the page opens and runs entirely inside the browser. Selecting a mode applies it automatically; there is no engage button.
@@ -33,4 +33,4 @@ bun run test:neural
 
 ## Neural model provenance
 
-The bundled ONNX graph was exported from KoeAI's MIT-licensed LLVC checkpoint. See [`public/models/README.md`](public/models/README.md) and [`scripts/export-llvc.py`](scripts/export-llvc.py).
+The full teacher graph was exported from KoeAI's MIT-licensed LLVC checkpoint; the production browser graph is a 128/64 student distilled for the bundled demo corpus. See [`public/models/README.md`](public/models/README.md), [`scripts/export-llvc.py`](scripts/export-llvc.py), and [`scripts/distill-llvc-student.py`](scripts/distill-llvc-student.py).

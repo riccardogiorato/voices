@@ -581,3 +581,75 @@ deleted (merged into the canonical files). Verified: `tsc --noEmit` clean,
 4. If it shows `no-iso`/`1t` with avg ≈14 ms, threaded WASM did not spawn —
    pivot options: run the onnx-simplifier export, or make the tuned-WebGPU path
    primary. Report the diagnostics.
+
+---
+
+## 13. Browser optimization and distilled-student experiment (2026-07-12)
+
+**Recorded:** 2026-07-12 22:11 CEST
+
+**Machine:** Apple M1 Pro, 10 cores, 16 GB RAM
+
+**Browser:** Chrome 150, headless Chrome DevTools Protocol harness
+
+**Runtime:** ONNX Runtime Web 1.27.0, cross-origin-isolated WASM
+
+**Streaming unit:** 208 samples at 16 kHz (13 ms audio budget)
+
+**Browser benchmark:** 250 sequential stateful chunks after 8 warmups
+
+### Reproducible feedback loops
+
+- `bun run benchmark:web -- <threads> <model>` launches real Chrome, runs the
+  application worker bundle, asserts finite/non-silent output, and fails when
+  average inference exceeds 2.4 ms unless `BENCHMARK_THRESHOLD_MS` overrides it.
+- `bun run test:playback [audio-path] [seconds]` drives the real React → media
+  element → AudioWorklet → worker → ring-buffer path and fails on a drained
+  buffer, incorrect isolation/threading, latency above 2.4 ms, or underruns.
+- `python3 scripts/evaluate-long-samples.py` streams unseen ~1-minute clips
+  through the full teacher and student and reports waveform/spectral fidelity.
+
+### Runtime and post-export probes
+
+| Candidate | Threads | Size | Avg | P99 | Max | Finding |
+|---|---:|---:|---:|---:|---:|---|
+| Full FP32 teacher | 1 | 14.19 MB | 8.82 ms | 9.85 ms | 10.50 ms | Real-time, no thread benefit |
+| Full FP32 teacher | 2 | 14.19 MB | 7.39 ms | 9.52 ms | 10.01 ms | Better |
+| Full FP32 teacher | 4 | 14.19 MB | **6.94 ms** | 10.97 ms | 11.31 ms | Best full-model thread count |
+| Full FP32 teacher | 8 | 14.19 MB | 9.04 ms | 15.71 ms | 22.06 ms | Over-threaded |
+| Simplified FP32 | 4 | 12.16 MB | 6.94 ms | 11.34 ms | 11.70 ms | ORT already performs rewrites |
+| FP16 | 4 | 7.58 MB | 8.94 ms | 18.09 ms | 25.06 ms | Smaller but slower on WASM CPU |
+| Dynamic UINT8 | 4 | 3.3 MB | 9.08 ms | 14.26 ms | 18.90 ms | Dynamic quantization overhead |
+| Static INT8 QDQ | 4 | 3.61 MB | 7.63 ms | 12.88 ms | 14.35 ms | Smaller, still slower than FP32/4t |
+| Static UINT8 QOperator | 4 | 3.48 MB | **6.09 ms** | 10.29 ms | 10.97 ms | Best no-training quant candidate; fidelity not yet audited |
+| Official LLVC-NC | 4 | 12.13 MB | 6.66 ms | 9.98 ms | 11.00 ms | Same 512/256 bottleneck remains |
+| Sliced 256/128 student | 4 | ~4.2 MB | 3.54 ms | 6.47 ms | 8.56 ms | Architecture speed probe only |
+| Distilled 128/64 student | 2 | 1.7 MB | **1.88–1.96 ms** | 2.33–3.08 ms | 3.13–4.74 ms | 4.8× faster, but capacity/generalization limited |
+| WebGPU, GPU-resident state | — | 14.19 MB | 13.25 ms | 17.63 ms | 33.85 ms | Dispatch overhead dominates |
+
+### Distilled mini method and quality outcome
+
+The 128/64 student was **not trained from scratch**. It was initialized by
+structured slicing of the official LLVC-NC PyTorch checkpoint, then trained in
+PyTorch/MPS to imitate the full teacher's streaming waveform. Training carried
+recurrent state between chunks but detached gradients at each chunk. Loss was
+`L1 + MSE`, optimized with AdamW for 8 epochs at 3e-4 and 6 epochs at 1e-4.
+English, Italian, Spanish, and French bundled clips were training inputs;
+Japanese was held out. Training loss fell from 0.03532 to 0.02348.
+
+Held-out bundled Japanese improved from correlation 0.061 (raw sliced weights)
+to 0.607 after distillation. However, a second evaluation on unseen macOS TTS
+voices and new ~1-minute text exposed poor generalization:
+
+| Unseen language/voice | Duration | Correlation ↑ | Spectral error ↓ | Sustained Chrome playback |
+|---|---:|---:|---:|---|
+| English / Daniel | 56.8 s | 0.067 | 0.754 | 1.9 ms avg, 104 ms buffer, 0 underruns |
+| Italian / Alice | 54.6 s | 0.586 | 0.666 | 1.9 ms avg, 102 ms buffer, 0 underruns |
+| Spanish / Mónica | 53.7 s | 0.764 | 0.513 | 1.9 ms avg, 101 ms buffer, 0 underruns |
+| French / Thomas | 55.6 s | 0.099 | 0.738 | 1.9 ms avg, 90 ms buffer, 0 underruns |
+
+**Conclusion:** the mini student proves the latency envelope and stable 100 ms
+playback buffer, but it is over-specialized and is not a general replacement
+for the full teacher. The next experiment must keep the untouched 512/256
+teacher and compare post-training quantized variants with no gradient training.
+Static UINT8 QOperator is the initial front-runner.

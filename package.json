@@ -9,6 +9,8 @@
     "start": "vite preview",
     "test:neural": "bun scripts/test-neural.mjs",
     "test:jitter": "bun scripts/test-jitter-buffer.mjs",
+    "test:playback": "bun scripts/test-playback-web.mjs",
+    "benchmark:web": "bun scripts/benchmark-web.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -12,6 +12,8 @@ import torch
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", type=Path, default=Path("work/LLVC"))
+    parser.add_argument("--experiment", default="llvc")
+    parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--output", type=Path, default=Path("public/models/common-voice-llvc.onnx"))
     args = parser.parse_args()
 
@@ -19,15 +21,18 @@ def main():
     sys.path.insert(0, str(source))
     from model import Net
 
-    config_path = source / "experiments/llvc/config.json"
-    checkpoint_path = source / "llvc_models/models/checkpoints/llvc/G_500000.pth"
+    config_path = source / f"experiments/{args.experiment}/config.json"
+    checkpoint_path = args.checkpoint or source / f"llvc_models/models/checkpoints/{args.experiment}/G_500000.pth"
     config = json.loads(config_path.read_text())
     model = Net(**config["model_params"])
     model.load_state_dict(torch.load(checkpoint_path, map_location="cpu")["model"])
     model.eval()
 
     enc, dec, out = model.init_buffers(1, torch.device("cpu"))
-    conv = model.convnet_pre.init_ctx_buf(1, torch.device("cpu"))
+    # LLVC-NC has no convolutional prenet. Preserve the standard 24-sample
+    # state shape as an identity passthrough so exported variants remain
+    # drop-in compatible with the browser worker.
+    conv = model.convnet_pre.init_ctx_buf(1, torch.device("cpu")) if hasattr(model, "convnet_pre") else torch.zeros(1, 1, 24)
     chunk_samples = model.dec_chunk_size * model.L
     audio = torch.zeros(1, 1, chunk_samples + model.L * 2)
 

@@ -18,6 +18,7 @@ export class StreamingAudioBuffer {
     this.available = 0
     this.phase = 0
     this.started = false
+    this.underruns = 0
     this.fade = 0
     this.lastSample = 0
   }

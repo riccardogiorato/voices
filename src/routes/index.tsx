@@ -26,12 +26,17 @@ type AudioEngine = {
 }
 
 function VoiceLab() {
+  const benchmarkParams = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search)
+  const benchmarkEnabled = benchmarkParams?.get('benchmark') === '1'
+  const benchmarkThreads = Number(benchmarkParams?.get('threads') || 8)
+  const benchmarkModel = benchmarkParams?.get('model') || 'student128'
   const [voiceMode, setVoiceMode] = useState<VoiceMode>('original')
   const [selectedSample, setSelectedSample] = useState<string>(SAMPLES[0].id)
   const [neuralStatus, setNeuralStatus] = useState<NeuralStatus>('loading')
   const [level, setLevel] = useState(0)
   const [message, setMessage] = useState('Choose a sample to begin')
   const [diagnostics, setDiagnostics] = useState<Diagnostics>({ averageMs: 0, maxMs: 0, p99Ms: 0, queue: 0, underruns: 0, bufferedMs: 0, threads: 0, isolated: false })
+  const [benchmarkResult, setBenchmarkResult] = useState<string>('')
   const audioRef = useRef<HTMLAudioElement>(null)
   const engineRef = useRef<AudioEngine | null>(null)
   const workerRef = useRef<Worker | null>(null)
@@ -48,6 +53,9 @@ function VoiceLab() {
         setNeuralStatus(data.runtime)
         setDiagnostics((current) => ({ ...current, threads: data.threads, isolated: data.isolated }))
         if (modeRef.current === 'neural') setMessage(`Neural ready · ${String(data.runtime).toUpperCase()} · ${data.isolated ? `${data.threads} threads` : 'single-thread'}`)
+        if (benchmarkEnabled) {
+          worker.postMessage({ type: 'benchmark', iterations: 250 })
+        }
       } else if (data.type === 'output') {
         engineRef.current?.worklet.port.postMessage({ type: 'output', samples: data.samples }, [data.samples.buffer])
       } else if (data.type === 'error') {
@@ -55,13 +63,15 @@ function VoiceLab() {
         setMessage(`Neural error · ${data.message}`)
       } else if (data.type === 'stats') {
         setDiagnostics((current) => ({ ...current, averageMs: data.averageMs, maxMs: data.maxMs, p99Ms: data.p99Ms, queue: data.queue }))
+      } else if (data.type === 'benchmark-result') {
+        setBenchmarkResult(JSON.stringify(data))
       }
     }
     worker.onerror = () => {
       setNeuralStatus('error')
       setMessage('Neural model could not be loaded')
     }
-    worker.postMessage({ type: 'init' })
+    worker.postMessage({ type: 'init', threads: benchmarkEnabled ? benchmarkThreads : undefined, model: benchmarkEnabled ? benchmarkModel : undefined })
 
     return () => {
       worker.terminate()
@@ -198,6 +208,7 @@ function VoiceLab() {
       </section>
 
       <section className="lab-grid">
+        <output data-testid="benchmark-result" hidden>{benchmarkResult}</output>
         <div className="panel input-panel supports-[backdrop-filter]:backdrop-blur-xl">
           <div className="panel-heading"><div><span className="section-index">01</span><h2>Audio samples</h2></div><span className="chip">SONIC 3</span></div>
           <div className="sample-list" role="listbox" aria-label="Audio sample">
@@ -223,7 +234,7 @@ function VoiceLab() {
           <div className="meter-label"><span>SIGNAL LEVEL</span><span className="meter-value">{Math.round(level * 100).toString().padStart(3, '0')}%</span></div>
           <div className="meter" aria-label="Signal level"><div className="meter-fill" style={{ width: `${Math.max(2, level * 100)}%` }} /><div className="meter-ticks"><span /><span /><span /><span /><span /></div></div>
           <p className="output-copy">{message}</p>
-          <div className={`mode-status ${voiceMode}`}><span>{voiceMode === 'original' ? '○' : '●'}</span><div><strong>{voiceMode === 'original' ? 'Processing disabled' : voiceMode === 'lite' ? 'Tonal profile enabled' : 'Neural conversion enabled'}</strong><small>{voiceMode === 'neural' ? `Runtime: ${neuralStatus.toUpperCase()} · ${diagnostics.isolated ? 'iso' : 'no-iso'} ${diagnostics.threads}t · avg ${diagnostics.averageMs.toFixed(1)}ms · p99 ${diagnostics.p99Ms.toFixed(0)}ms · max ${diagnostics.maxMs.toFixed(0)}ms · queue ${diagnostics.queue} · buffer ${diagnostics.bufferedMs.toFixed(0)}ms · underruns ${diagnostics.underruns}` : 'Mode changes apply automatically'}</small></div></div>
+          <div className={`mode-status ${voiceMode}`}><span>{voiceMode === 'original' ? '○' : '●'}</span><div><strong>{voiceMode === 'original' ? 'Processing disabled' : voiceMode === 'lite' ? 'Tonal profile enabled' : 'Neural conversion enabled'}</strong><small>{voiceMode === 'neural' ? `Runtime: ${neuralStatus.toUpperCase()} · ${diagnostics.isolated ? 'iso' : 'no-iso'}${diagnostics.threads > 0 ? ` ${diagnostics.threads}t` : ''} · avg ${diagnostics.averageMs.toFixed(1)}ms · p99 ${diagnostics.p99Ms.toFixed(0)}ms · max ${diagnostics.maxMs.toFixed(0)}ms · queue ${diagnostics.queue} · buffer ${diagnostics.bufferedMs.toFixed(0)}ms · underruns ${diagnostics.underruns}` : 'Mode changes apply automatically'}</small></div></div>
           <div className="tip"><span className="tip-star">✦</span><div><strong>Compare voices</strong><p>Replay the same sample while switching tabs, then compare languages to hear how consistently they converge.</p></div></div>
         </div>
       </section>
@@ -246,5 +257,5 @@ function makeSoftCurve(amount: number) {
 function ModeCard({ mode, neuralStatus }: { mode: VoiceMode; neuralStatus: NeuralStatus }) {
   if (mode === 'original') return <div className="common-mode-card"><span className="mode-glyph">○</span><div><strong>Original audio</strong><p>The generated voice plays untouched. Use this baseline to hear how much identity changes in the other modes.</p><ul><li>No processing</li><li>Original timing and timbre</li><li>Immediate playback</li></ul></div></div>
   if (mode === 'lite') return <div className="common-mode-card"><span className="mode-glyph">≈</span><div><strong>Common Voice Lite</strong><p>A consistent tonal profile using voice-band EQ, strong dynamics normalization, soft saturation, and limiting.</p><ul><li>Near-zero latency</li><li>No model required</li><li>Subtle identity reduction</li></ul></div></div>
-  return <div className="common-mode-card neural-card"><span className="mode-glyph">◇</span><div><strong>Common Voice Neural</strong><p>The LLVC any-to-one model maps every language and speaker toward one learned target identity.</p><ul><li>{neuralStatus === 'loading' ? 'Preloading model…' : neuralStatus === 'error' ? 'Model unavailable' : `${neuralStatus.toUpperCase()} ready`}</li><li>400 ms anti-glitch buffer</li><li>Browser-local inference</li></ul></div></div>
+  return <div className="common-mode-card neural-card"><span className="mode-glyph">◇</span><div><strong>Common Voice Neural</strong><p>A distilled LLVC model maps every language and speaker toward one learned target identity.</p><ul><li>{neuralStatus === 'loading' ? 'Preloading model…' : neuralStatus === 'error' ? 'Model unavailable' : `${neuralStatus.toUpperCase()} ready`}</li><li>100 ms low-latency buffer</li><li>Browser-local inference</li></ul></div></div>
 }

@@ -145,4 +145,6 @@ vite.config.ts.timestamp-*
 # TanStack Start
 .tanstack/
 .DS_Store
+__pycache__/
+*.py[cod]
 work/

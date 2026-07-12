@@ -33,4 +33,9 @@ bun run test:neural
 
 ## Neural model provenance
 
-The full teacher graph was exported from KoeAI's MIT-licensed LLVC checkpoint; the production browser graph is a 128/64 student distilled for the bundled demo corpus. See [`public/models/README.md`](public/models/README.md), [`scripts/export-llvc.py`](scripts/export-llvc.py), and [`scripts/distill-llvc-student.py`](scripts/distill-llvc-student.py).
+The full teacher graph was exported from KoeAI's MIT-licensed LLVC checkpoint.
+The default browser graph is a no-training Q8 post-training quantization of that
+same full architecture; the original FP32 teacher and a more aggressive Q8
+variant are also selectable. See [`public/models/README.md`](public/models/README.md),
+[`scripts/export-llvc.py`](scripts/export-llvc.py), and
+[`scripts/quantize-llvc-variants.py`](scripts/quantize-llvc-variants.py).

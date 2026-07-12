@@ -653,3 +653,95 @@ playback buffer, but it is over-specialized and is not a general replacement
 for the full teacher. The next experiment must keep the untouched 512/256
 teacher and compare post-training quantized variants with no gradient training.
 Static UINT8 QOperator is the initial front-runner.
+
+---
+
+## 14. Full-teacher post-training quantization matrix (2026-07-12)
+
+**Recorded:** 2026-07-12 22:39 CEST
+
+**Baseline commit:** `f532d86` (`Benchmark and document neural browser optimization`)
+
+**Objective:** retain the original trained 512/256 LLVC teacher, perform no
+gradient training, build multiple precision/compression levels, and choose at
+most two compressed variants from measured size, quality, and Chrome behavior.
+
+### Exact conversion method
+
+`scripts/quantize-llvc-variants.py` always starts from the untouched
+`common-voice-llvc.onnx` FP32 teacher. FP16 converts eligible constants to IEEE
+half precision while retaining FP32 inputs/outputs and sensitive normalization
+operations. The three Q8 models use ONNX Runtime static QOperator PTQ with
+unsigned 8-bit activations and weights plus per-channel weight scales:
+
+| Variant | Quantized operations |
+|---|---|
+| FP16 | Eligible weights/constants; FP32 I/O |
+| Q8 High | Eight dominant Conv nodes with 512×512×1 weights |
+| Q8 Balanced | Q8 High nodes plus every MatMul/Gemm |
+| Q8 Max | Every supported Conv/MatMul/Gemm |
+
+Static calibration observed 144 stateful inputs: 16 evenly spaced chunks from
+each of the five bundled clips and four new long clips. Recurrent encoder,
+decoder, output, and convolution state came from the preceding original-teacher
+chunk. Calibration selected numeric ranges only. There was no loss function,
+optimizer, backpropagation, epoch, fine-tuning, or weight update.
+
+### Size and quality against the original FP32 output
+
+The evaluator streamed all five bundled languages plus four unseen ~54–57 s
+English/Italian/Spanish/French clips in 208-sample chunks. Metrics compare each
+candidate's converted waveform directly with the original teacher waveform.
+
+| Model | Size | FP32 size | All-clip corr ↑ | SNR ↑ | Spectral error ↓ |
+|---|---:|---:|---:|---:|---:|
+| Original FP32 | 14.19 MB | 100.0% | 1.000000 | reference | 0.0000 |
+| FP16 | 7.58 MB | 53.4% | 0.999998 | 54.24 dB | 0.0015 |
+| Q8 High | 7.90 MB | 55.7% | **0.997869** | 24.18 dB | 0.0447 |
+| Q8 Balanced | 5.92 MB | 41.8% | 0.990606 | 17.53 dB | 0.1039 |
+| Q8 Max | 5.79 MB | 40.8% | **0.955597** | 10.86 dB | 0.2104 |
+
+Long-unseen Q8 High correlations were English 0.99837, French 0.99887,
+Italian 0.99609, and Spanish 0.99801. Q8 Max was more variable: 0.97498,
+0.98324, 0.95075, and 0.95203 respectively. These objective proxy metrics do
+not replace a human listening test; rendered WAVs are under
+`public/audio/quantization-comparison/` for that decision.
+
+### Direct Chrome 150 WASM benchmark
+
+Each cell is 250 sequential stateful chunks after 8 warmups. The lowest average
+for each model is bold.
+
+| Model | 1 thread | 2 threads | 4 threads | Best vs FP32 |
+|---|---:|---:|---:|---:|
+| Original FP32 | 7.237 ms | **5.879 ms** | 5.911 ms | reference |
+| FP16 | 8.678 ms | 7.544 ms | **6.924 ms** | 17.8% slower |
+| Q8 High | 8.027 ms | 6.329 ms | **5.556 ms** | 5.5% faster |
+| Q8 Balanced | 8.400 ms | 6.656 ms | **5.862 ms** | 0.3% faster |
+| Q8 Max | 7.449 ms | 5.667 ms | **4.819 ms** | 18.0% faster |
+
+In a separate 45-second real Chrome playback test on unseen English, Original
+FP32 (2t), Q8 High (4t), and Q8 Max (4t) averaged 5.8, 5.6, and 5.0 ms. All had
+queue 0, 91–104 ms buffered, and zero underruns.
+
+### Decision
+
+- **Default: Q8 High.** It retains the most quantized quality (0.99787 aggregate
+  correlation), halves the download footprint, and is modestly faster.
+- **Aggressive option: Q8 Max.** It is the smallest and fastest no-training
+  candidate, with a measurable quality compromise that must be judged by ear.
+- FP16 is rejected because Chrome WASM made it slower despite excellent
+  fidelity. Q8 Balanced is rejected because it loses more quality than Q8 High
+  without materially beating the original's latency.
+
+No conventional Q8 variant achieved either 20% of FP32 size or 4× FP32 speed.
+This graph is dominated by stateful convolutions and browser/WASM dispatch, and
+not every operation or state tensor is quantized. Reaching 4× while retaining
+the full architecture would require a different runtime/kernel strategy; the
+only tested 4× result was the distilled mini student, whose unseen-language
+quality was unacceptable. This is a measured limit, not a claim that Q8 alone
+can satisfy both targets.
+
+Machine-readable evidence is stored in `reports/quantization-evaluation.json`,
+`reports/quantization-chrome-benchmark.json`, and
+`reports/quantization-playback-test.json`.

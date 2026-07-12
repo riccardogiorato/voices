@@ -4,10 +4,8 @@
 // inference must finish in <13 ms or the output jitter buffer drains and the
 // AudioWorklet glitches.
 //
-// The 128/64 distilled student runs at roughly 1.9 ms per chunk in Chrome with
-// two WASM threads. The full 512/256 teacher takes roughly 9.3 ms, while WebGPU
-// with GPU-resident recurrent state still takes roughly 13.2 ms because this
-// small fragmented graph is dominated by dispatch overhead.
+// The production Q8 High variant keeps the full 512/256 teacher architecture
+// and runs at roughly 5.6 ms per chunk in Chrome with four WASM threads.
 //
 // 8 warmup runs prime the kernels before 'ready' (no cold-start spike). Falls
 // back to single-threaded WASM if cross-origin isolation isn't available.
@@ -16,7 +14,7 @@ import * as ort from 'onnxruntime-web/wasm'
 import type { InferenceSession, Tensor } from 'onnxruntime-web'
 
 type Runtime = 'wasm'
-type ModelVariant = 'current' | 'student128'
+type ModelVariant = 'current' | 'fp16' | 'q8-high' | 'q8-balanced' | 'q8-max'
 type ReadyMessage = { type: 'ready'; runtime: Runtime; threads: number; isolated: boolean }
 type WorkerMessage =
   | { type: 'init'; threads?: number; model?: ModelVariant }
@@ -104,10 +102,10 @@ async function warmup() {
   }
 }
 
-async function createSession(requestedThreads?: number, requestedModel: ModelVariant = 'student128') {
+async function createSession(requestedThreads?: number, requestedModel: ModelVariant = 'q8-high') {
   modelVariant = requestedModel
   const isolated = workerScope.crossOriginIsolated === true
-  threads = isolated ? Math.min(requestedThreads ?? (modelVariant === 'student128' ? 2 : 4), navigator.hardwareConcurrency || 4) : 1
+  threads = isolated ? Math.min(requestedThreads ?? 4, navigator.hardwareConcurrency || 4) : 1
   ort.env.wasm.numThreads = threads
   ort.env.wasm.simd = true
   ort.env.wasm.proxy = false
@@ -115,9 +113,12 @@ async function createSession(requestedThreads?: number, requestedModel: ModelVar
 
   const configs: Record<ModelVariant, { model: string; external?: string }> = {
     current: { model: '/models/common-voice-llvc.onnx', external: '/models/common-voice-llvc.onnx.data' },
-    student128: { model: '/models/common-voice-llvc-student128.onnx', external: '/models/common-voice-llvc-student128.onnx.data' },
+    fp16: { model: '/models/common-voice-llvc-fp16.onnx' },
+    'q8-high': { model: '/models/common-voice-llvc-q8-high.onnx' },
+    'q8-balanced': { model: '/models/common-voice-llvc-q8-balanced.onnx' },
+    'q8-max': { model: '/models/common-voice-llvc-q8-max.onnx' },
   }
-  const dimensions = modelVariant === 'student128' ? [128, 64] : [512, 256]
+  const dimensions = [512, 256]
   stateShapes = {
     enc_state: [1, dimensions[0], 510],
     dec_state: [1, 2, 13, dimensions[1]],

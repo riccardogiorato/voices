@@ -1,0 +1,1183 @@
+{
+  "generatedAt": "2026-07-12T22:30:27+02:00",
+  "method": {
+    "training": false,
+    "reference": "Original FP32 teacher, stateful 208-sample chunks at 16 kHz",
+    "sampleCount": 9,
+    "bundledCount": 5,
+    "longUnseenCount": 4,
+    "qualityReference": "Each variant compared sample-for-sample with FP32 output"
+  },
+  "models": {
+    "fp32": {
+      "path": "public/models/common-voice-llvc.onnx",
+      "size": {
+        "bytes": 14189465,
+        "megabytes": 14.189465,
+        "fractionOfFp32": 1.0
+      },
+      "samples": [
+        {
+          "sample": "english",
+          "category": "bundled",
+          "durationSeconds": 22.65075,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 151.320068359375,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.4524610638618469,
+            "rms": 0.061157193034887314,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.025906606790553,
+            "p99Ms": 8.533154529141028,
+            "maxMs": 16.06520899804309,
+            "chunks": 1742
+          }
+        },
+        {
+          "sample": "french",
+          "category": "bundled",
+          "durationSeconds": 21.2111875,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 150.62445068359375,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.32604607939720154,
+            "rms": 0.05833972245454788,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.696495271616048,
+            "p99Ms": 7.257591098459671,
+            "maxMs": 13.803499998175539,
+            "chunks": 1631
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "bundled",
+          "durationSeconds": 27.2483125,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 151.3892822265625,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.3496316373348236,
+            "rms": 0.056199997663497925,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.843097977098865,
+            "p99Ms": 7.986069050275562,
+            "maxMs": 45.21483300050022,
+            "chunks": 2096
+          }
+        },
+        {
+          "sample": "japanese",
+          "category": "bundled",
+          "durationSeconds": 30.95175,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 154.22996520996094,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.413102924823761,
+            "rms": 0.07314387708902359,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.911431417219449,
+            "p99Ms": 6.797135680171778,
+            "maxMs": 8.888291999028297,
+            "chunks": 2380
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "bundled",
+          "durationSeconds": 28.409375,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 151.94114685058594,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.36591631174087524,
+            "rms": 0.0586543045938015,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.88695251399344,
+            "p99Ms": 7.0685580029385084,
+            "maxMs": 23.851124999055173,
+            "chunks": 2185
+          }
+        },
+        {
+          "sample": "english",
+          "category": "long-unseen",
+          "durationSeconds": 56.891125,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 0.9999999999999999,
+            "snrDb": 154.86521911621094,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.29759588837623596,
+            "rms": 0.05803505331277847,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.065171870403783,
+            "p99Ms": 8.196656499421806,
+            "maxMs": 14.452375002292683,
+            "chunks": 4376
+          }
+        },
+        {
+          "sample": "french",
+          "category": "long-unseen",
+          "durationSeconds": 55.600625,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 155.578125,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.24803201854228973,
+            "rms": 0.06373171508312225,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.989632227807986,
+            "p99Ms": 7.744458497654705,
+            "maxMs": 18.13683299769764,
+            "chunks": 4276
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "long-unseen",
+          "durationSeconds": 54.5853125,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 0.9999999999999998,
+            "snrDb": 155.54037475585938,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.34825724363327026,
+            "rms": 0.06404218822717667,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.011747215592211,
+            "p99Ms": 7.500229479992407,
+            "maxMs": 21.930500002781628,
+            "chunks": 4198
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "long-unseen",
+          "durationSeconds": 53.7255,
+          "quality": {
+            "mae": 0.0,
+            "mse": 0.0,
+            "correlation": 1.0,
+            "snrDb": 155.89622497558594,
+            "spectralError": 0.0,
+            "logMagnitudeError": 0.0,
+            "peak": 0.2962072789669037,
+            "rms": 0.06725110113620758,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.127890854312383,
+            "p99Ms": 7.77329645905411,
+            "maxMs": 24.215583001932828,
+            "chunks": 4132
+          }
+        }
+      ],
+      "aggregate": {
+        "bundled": {
+          "mae": 0.0,
+          "mse": 0.0,
+          "correlation": 1.0,
+          "snrDb": 151.90098266601564,
+          "spectralError": 0.0,
+          "logMagnitudeError": 0.0
+        },
+        "long-unseen": {
+          "mae": 0.0,
+          "mse": 0.0,
+          "correlation": 1.0,
+          "snrDb": 155.46998596191406,
+          "spectralError": 0.0,
+          "logMagnitudeError": 0.0
+        },
+        "all": {
+          "mae": 0.0,
+          "mse": 0.0,
+          "correlation": 1.0,
+          "snrDb": 153.4872063530816,
+          "spectralError": 0.0,
+          "logMagnitudeError": 0.0
+        }
+      }
+    },
+    "fp16": {
+      "path": "public/models/common-voice-llvc-fp16.onnx",
+      "size": {
+        "bytes": 7578759,
+        "megabytes": 7.578759,
+        "fractionOfFp32": 0.5341116807434247
+      },
+      "samples": [
+        {
+          "sample": "english",
+          "category": "bundled",
+          "durationSeconds": 22.65075,
+          "quality": {
+            "mae": 7.74075961089693e-05,
+            "mse": 2.058940395954778e-08,
+            "correlation": 0.9999972678515219,
+            "snrDb": 52.59251022338867,
+            "spectralError": 0.0016524484140514255,
+            "logMagnitudeError": 0.0009357610805149308,
+            "peak": 0.45213380455970764,
+            "rms": 0.06114470213651657,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.269361557943776,
+            "p99Ms": 9.413289780968622,
+            "maxMs": 15.487624998058891,
+            "chunks": 1742
+          }
+        },
+        {
+          "sample": "french",
+          "category": "bundled",
+          "durationSeconds": 21.2111875,
+          "quality": {
+            "mae": 5.3883137297816575e-05,
+            "mse": 1.1461656512778973e-08,
+            "correlation": 0.9999983195151921,
+            "snrDb": 54.72681427001953,
+            "spectralError": 0.001283754375862882,
+            "logMagnitudeError": 0.0007745721142514731,
+            "peak": 0.3259584605693817,
+            "rms": 0.05833487957715988,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.883175147161915,
+            "p99Ms": 6.798445799722687,
+            "maxMs": 19.67658300054609,
+            "chunks": 1631
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "bundled",
+          "durationSeconds": 27.2483125,
+          "quality": {
+            "mae": 5.239853635430336e-05,
+            "mse": 9.926330868381683e-09,
+            "correlation": 0.9999984494635092,
+            "snrDb": 55.02684020996094,
+            "spectralError": 0.0012060474013279644,
+            "logMagnitudeError": 0.0007098949821443827,
+            "peak": 0.3497743308544159,
+            "rms": 0.05621138960123062,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.406150792929,
+            "p99Ms": 12.021858352090954,
+            "maxMs": 40.334917001018766,
+            "chunks": 2096
+          }
+        },
+        {
+          "sample": "japanese",
+          "category": "bundled",
+          "durationSeconds": 30.95175,
+          "quality": {
+            "mae": 6.0345864767441526e-05,
+            "mse": 1.60896735934557e-08,
+            "correlation": 0.999998499582467,
+            "snrDb": 55.21808624267578,
+            "spectralError": 0.0012694657775879888,
+            "logMagnitudeError": 0.0008489185021329879,
+            "peak": 0.41281968355178833,
+            "rms": 0.07313789427280426,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.146932521870249,
+            "p99Ms": 6.658263180070208,
+            "maxMs": 22.69062499908614,
+            "chunks": 2380
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "bundled",
+          "durationSeconds": 28.409375,
+          "quality": {
+            "mae": 7.172075856942683e-05,
+            "mse": 2.0688906587906786e-08,
+            "correlation": 0.9999970232063701,
+            "snrDb": 52.20862579345703,
+            "spectralError": 0.0017469441788291102,
+            "logMagnitudeError": 0.0009097185093148043,
+            "peak": 0.3658789098262787,
+            "rms": 0.0586397610604763,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.186965989904772,
+            "p99Ms": 6.922289719659599,
+            "maxMs": 10.003291001339676,
+            "chunks": 2185
+          }
+        },
+        {
+          "sample": "english",
+          "category": "long-unseen",
+          "durationSeconds": 56.891125,
+          "quality": {
+            "mae": 4.3421077862149104e-05,
+            "mse": 5.018331528106046e-09,
+            "correlation": 0.9999992551517803,
+            "snrDb": 58.268211364746094,
+            "spectralError": 0.0008541711430099129,
+            "logMagnitudeError": 0.000779643051027024,
+            "peak": 0.2976938486099243,
+            "rms": 0.05803575739264488,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.338388346890447,
+            "p99Ms": 9.117530748881109,
+            "maxMs": 22.224917000130517,
+            "chunks": 4376
+          }
+        },
+        {
+          "sample": "french",
+          "category": "long-unseen",
+          "durationSeconds": 55.600625,
+          "quality": {
+            "mae": 4.912300573778339e-05,
+            "mse": 5.839269956453563e-09,
+            "correlation": 0.9999992858085277,
+            "snrDb": 58.42353057861328,
+            "spectralError": 0.0008395320374409085,
+            "logMagnitudeError": 0.000981167542541805,
+            "peak": 0.24801132082939148,
+            "rms": 0.06373774260282516,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.941943432875338,
+            "p99Ms": 13.0221769977652,
+            "maxMs": 58.225832999596605,
+            "chunks": 4276
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "long-unseen",
+          "durationSeconds": 54.5853125,
+          "quality": {
+            "mae": 9.933929686667398e-05,
+            "mse": 3.8762685505844274e-08,
+            "correlation": 0.9999952784190229,
+            "snrDb": 50.24518585205078,
+            "spectralError": 0.002379064635749085,
+            "logMagnitudeError": 0.0011038675443600266,
+            "peak": 0.348233699798584,
+            "rms": 0.06403618305921555,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.76728843157688,
+            "p99Ms": 13.204363749609875,
+            "maxMs": 78.65954199951375,
+            "chunks": 4198
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "long-unseen",
+          "durationSeconds": 53.7255,
+          "quality": {
+            "mae": 9.433132800040767e-05,
+            "mse": 3.2639427161029744e-08,
+            "correlation": 0.999996403512616,
+            "snrDb": 51.41656494140625,
+            "spectralError": 0.002034274191555238,
+            "logMagnitudeError": 0.0010711894857011225,
+            "peak": 0.29663193225860596,
+            "rms": 0.06724047660827637,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.302032106504052,
+            "p99Ms": 7.529963521701575,
+            "maxMs": 22.7401660013129,
+            "chunks": 4132
+          }
+        }
+      ],
+      "aggregate": {
+        "bundled": {
+          "mae": 6.315117861959152e-05,
+          "mse": 1.5751194304414184e-08,
+          "correlation": 0.9999979119238122,
+          "snrDb": 53.95457534790039,
+          "spectralError": 0.0014317320295318744,
+          "logMagnitudeError": 0.0008357730376717158
+        },
+        "long-unseen": {
+          "mae": 7.155367711675353e-05,
+          "mse": 2.0564928537858407e-08,
+          "correlation": 0.9999975557229868,
+          "snrDb": 54.5883731842041,
+          "spectralError": 0.001526760501938786,
+          "logMagnitudeError": 0.0009839669059074946
+        },
+        "all": {
+          "mae": 6.688562239610797e-05,
+          "mse": 1.7890631741500506e-08,
+          "correlation": 0.9999977536123343,
+          "snrDb": 54.236263275146484,
+          "spectralError": 0.0014739669061571681,
+          "logMagnitudeError": 0.0009016369791098397
+        }
+      }
+    },
+    "q8-high": {
+      "path": "public/models/common-voice-llvc-q8-high.onnx",
+      "size": {
+        "bytes": 7898345,
+        "megabytes": 7.898345,
+        "fractionOfFp32": 0.5566344467532779
+      },
+      "samples": [
+        {
+          "sample": "english",
+          "category": "bundled",
+          "durationSeconds": 22.65075,
+          "quality": {
+            "mae": 0.002614016644656658,
+            "mse": 2.2614705812884495e-05,
+            "correlation": 0.9970307843083462,
+            "snrDb": 22.185041427612305,
+            "spectralError": 0.05225222149117313,
+            "logMagnitudeError": 0.02099618394122255,
+            "peak": 0.44574519991874695,
+            "rms": 0.06031472980976105,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.73327549311485,
+            "p99Ms": 9.512090440148306,
+            "maxMs": 16.312083997036098,
+            "chunks": 1742
+          }
+        },
+        {
+          "sample": "french",
+          "category": "bundled",
+          "durationSeconds": 21.2111875,
+          "quality": {
+            "mae": 0.0015480677830055356,
+            "mse": 9.710037375043612e-06,
+            "correlation": 0.998617084310219,
+            "snrDb": 25.447078704833984,
+            "spectralError": 0.03614509593367916,
+            "logMagnitudeError": 0.017023105921259628,
+            "peak": 0.32122135162353516,
+            "rms": 0.05770861357450485,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.449337817325366,
+            "p99Ms": 7.104883200008772,
+            "maxMs": 25.410915997781558,
+            "chunks": 1631
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "bundled",
+          "durationSeconds": 27.2483125,
+          "quality": {
+            "mae": 0.0014516788069158792,
+            "mse": 6.980052148719551e-06,
+            "correlation": 0.9989143816317869,
+            "snrDb": 26.55613899230957,
+            "spectralError": 0.03183043225116567,
+            "logMagnitudeError": 0.014757900245933838,
+            "peak": 0.34770211577415466,
+            "rms": 0.055783942341804504,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.951608171259484,
+            "p99Ms": 12.47854409884895,
+            "maxMs": 34.23275000022841,
+            "chunks": 2096
+          }
+        },
+        {
+          "sample": "japanese",
+          "category": "bundled",
+          "durationSeconds": 30.95175,
+          "quality": {
+            "mae": 0.001900407369248569,
+            "mse": 1.2918341781187337e-05,
+            "correlation": 0.9988486848854948,
+            "snrDb": 26.171491622924805,
+            "spectralError": 0.03482959396152722,
+            "logMagnitudeError": 0.01693218952516913,
+            "peak": 0.4071364104747772,
+            "rms": 0.07228101044893265,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.556519748346071,
+            "p99Ms": 5.9460114996545625,
+            "maxMs": 14.50766699781525,
+            "chunks": 2380
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "bundled",
+          "durationSeconds": 28.409375,
+          "quality": {
+            "mae": 0.002572743222117424,
+            "mse": 2.7347290597390383e-05,
+            "correlation": 0.9960744558929739,
+            "snrDb": 20.996854782104492,
+            "spectralError": 0.061487654504967466,
+            "logMagnitudeError": 0.022312840273448598,
+            "peak": 0.3622252643108368,
+            "rms": 0.057799555361270905,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.646443057702338,
+            "p99Ms": 6.753267880267227,
+            "maxMs": 45.97054199984996,
+            "chunks": 2185
+          }
+        },
+        {
+          "sample": "english",
+          "category": "long-unseen",
+          "durationSeconds": 56.891125,
+          "quality": {
+            "mae": 0.0019155179616063833,
+            "mse": 1.1061742952733766e-05,
+            "correlation": 0.9983668029112307,
+            "snrDb": 24.8355712890625,
+            "spectralError": 0.03814917669613526,
+            "logMagnitudeError": 0.021633636709622005,
+            "peak": 0.2910870909690857,
+            "rms": 0.05767709016799927,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.58964706101381,
+            "p99Ms": 15.027198499410588,
+            "maxMs": 37.291249998816056,
+            "chunks": 4376
+          }
+        },
+        {
+          "sample": "french",
+          "category": "long-unseen",
+          "durationSeconds": 55.600625,
+          "quality": {
+            "mae": 0.0017820849316194654,
+            "mse": 9.288732144341338e-06,
+            "correlation": 0.9988658397761464,
+            "snrDb": 26.407546997070312,
+            "spectralError": 0.03221059177832618,
+            "logMagnitudeError": 0.022570805769589187,
+            "peak": 0.2537921369075775,
+            "rms": 0.0633755624294281,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.84801116509338,
+            "p99Ms": 8.532958749128738,
+            "maxMs": 20.460332998482045,
+            "chunks": 4276
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "long-unseen",
+          "durationSeconds": 54.5853125,
+          "quality": {
+            "mae": 0.002991850022226572,
+            "mse": 3.218134952476248e-05,
+            "correlation": 0.9960869166873849,
+            "snrDb": 21.053279876708984,
+            "spectralError": 0.06876525132124721,
+            "logMagnitudeError": 0.023299276054825357,
+            "peak": 0.3378143012523651,
+            "rms": 0.06340955197811127,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.831909291819671,
+            "p99Ms": 8.163924468499317,
+            "maxMs": 20.92116600033478,
+            "chunks": 4198
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "long-unseen",
+          "durationSeconds": 53.7255,
+          "quality": {
+            "mae": 0.0024553777184337378,
+            "mse": 1.8194374206359498e-05,
+            "correlation": 0.9980147818781051,
+            "snrDb": 23.954618453979492,
+            "spectralError": 0.04624892015495973,
+            "logMagnitudeError": 0.019125746460999616,
+            "peak": 0.3011099100112915,
+            "rms": 0.06661254167556763,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.594104255802,
+            "p99Ms": 6.0414110221972805,
+            "maxMs": 10.48679200175684,
+            "chunks": 4132
+          }
+        }
+      ],
+      "aggregate": {
+        "bundled": {
+          "mae": 0.002017382765188813,
+          "mse": 1.5914085543045077e-05,
+          "correlation": 0.9978970782057642,
+          "snrDb": 24.271321105957032,
+          "spectralError": 0.04330899962850253,
+          "logMagnitudeError": 0.018404443981406747
+        },
+        "long-unseen": {
+          "mae": 0.0022862076584715396,
+          "mse": 1.768154970704927e-05,
+          "correlation": 0.9978335853132168,
+          "snrDb": 24.062754154205322,
+          "spectralError": 0.04634348498766709,
+          "logMagnitudeError": 0.021657366248759042
+        },
+        "all": {
+          "mae": 0.0021368604955366915,
+          "mse": 1.6699625171491385e-05,
+          "correlation": 0.9978688591424097,
+          "snrDb": 24.178624682956272,
+          "spectralError": 0.04465765978813122,
+          "logMagnitudeError": 0.019850187211341103
+        }
+      }
+    },
+    "q8-balanced": {
+      "path": "public/models/common-voice-llvc-q8-balanced.onnx",
+      "size": {
+        "bytes": 5924826,
+        "megabytes": 5.924826,
+        "fractionOfFp32": 0.4175510493172223
+      },
+      "samples": [
+        {
+          "sample": "english",
+          "category": "bundled",
+          "durationSeconds": 22.65075,
+          "quality": {
+            "mae": 0.006354518234729767,
+            "mse": 0.00012184334627818316,
+            "correlation": 0.9853887494387781,
+            "snrDb": 14.870933532714844,
+            "spectralError": 0.1330693274922863,
+            "logMagnitudeError": 0.06505575427772152,
+            "peak": 0.43832385540008545,
+            "rms": 0.05661170557141304,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 5.373901915073975,
+            "p99Ms": 16.00248896898845,
+            "maxMs": 81.27075000084005,
+            "chunks": 1742
+          }
+        },
+        {
+          "sample": "french",
+          "category": "bundled",
+          "durationSeconds": 21.2111875,
+          "quality": {
+            "mae": 0.004757733549922705,
+            "mse": 7.41290787118487e-05,
+            "correlation": 0.9906597873859805,
+            "snrDb": 16.619400024414062,
+            "spectralError": 0.112666607798806,
+            "logMagnitudeError": 0.06033715244798402,
+            "peak": 0.3114040791988373,
+            "rms": 0.05450183153152466,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.427530244047676,
+            "p99Ms": 7.14219990186394,
+            "maxMs": 9.157250002317596,
+            "chunks": 1631
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "bundled",
+          "durationSeconds": 27.2483125,
+          "quality": {
+            "mae": 0.004394923336803913,
+            "mse": 6.0758389736292884e-05,
+            "correlation": 0.991337453120493,
+            "snrDb": 17.158662796020508,
+            "spectralError": 0.10296526932783516,
+            "logMagnitudeError": 0.048094621582412345,
+            "peak": 0.33883538842201233,
+            "rms": 0.05320844054222107,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.482241003837535,
+            "p99Ms": 5.689437198998351,
+            "maxMs": 10.178083000937477,
+            "chunks": 2096
+          }
+        },
+        {
+          "sample": "japanese",
+          "category": "bundled",
+          "durationSeconds": 30.95175,
+          "quality": {
+            "mae": 0.005420852918177843,
+            "mse": 9.727689757710323e-05,
+            "correlation": 0.9923236307975576,
+            "snrDb": 17.403461456298828,
+            "spectralError": 0.1023084981388871,
+            "logMagnitudeError": 0.05930659741470946,
+            "peak": 0.39053773880004883,
+            "rms": 0.06865188479423523,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.520416200423771,
+            "p99Ms": 5.694071248944966,
+            "maxMs": 10.715583001001505,
+            "chunks": 2380
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "bundled",
+          "durationSeconds": 28.409375,
+          "quality": {
+            "mae": 0.006015565246343613,
+            "mse": 0.00012052238889737055,
+            "correlation": 0.9839650781073496,
+            "snrDb": 14.555320739746094,
+            "spectralError": 0.138122235774035,
+            "logMagnitudeError": 0.0633925798056395,
+            "peak": 0.34851759672164917,
+            "rms": 0.05438661947846413,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.561215453557481,
+            "p99Ms": 5.806541558995363,
+            "maxMs": 12.533833996712929,
+            "chunks": 2185
+          }
+        },
+        {
+          "sample": "english",
+          "category": "long-unseen",
+          "durationSeconds": 56.891125,
+          "quality": {
+            "mae": 0.0029359629843384027,
+            "mse": 2.164993748010602e-05,
+            "correlation": 0.9969933699310484,
+            "snrDb": 21.919240951538086,
+            "spectralError": 0.05805491267207411,
+            "logMagnitudeError": 0.051715833491788425,
+            "peak": 0.2918045222759247,
+            "rms": 0.056666258722543716,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.707919313092679,
+            "p99Ms": 6.902240250383329,
+            "maxMs": 26.868583001487423,
+            "chunks": 4376
+          }
+        },
+        {
+          "sample": "french",
+          "category": "long-unseen",
+          "durationSeconds": 55.600625,
+          "quality": {
+            "mae": 0.00285696005448699,
+            "mse": 2.01928814931307e-05,
+            "correlation": 0.9975840091328126,
+            "snrDb": 23.035127639770508,
+            "spectralError": 0.05070232103387806,
+            "logMagnitudeError": 0.06136292958864119,
+            "peak": 0.24081385135650635,
+            "rms": 0.06281193345785141,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.643008852890676,
+            "p99Ms": 7.03551025071647,
+            "maxMs": 13.566667003033217,
+            "chunks": 4276
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "long-unseen",
+          "durationSeconds": 54.5853125,
+          "quality": {
+            "mae": 0.006358502898365259,
+            "mse": 0.00011154818639624864,
+            "correlation": 0.9871962406558477,
+            "snrDb": 15.654698371887207,
+            "spectralError": 0.12546688680964455,
+            "logMagnitudeError": 0.06837071477080517,
+            "peak": 0.3291347026824951,
+            "rms": 0.06054195016622543,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.7507640540703555,
+            "p99Ms": 8.059898992541997,
+            "maxMs": 21.6307919981773,
+            "chunks": 4198
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "long-unseen",
+          "durationSeconds": 53.7255,
+          "quality": {
+            "mae": 0.006491107866168022,
+            "mse": 0.00010035972809419036,
+            "correlation": 0.9900063760117274,
+            "snrDb": 16.538393020629883,
+            "spectralError": 0.11215393282547734,
+            "logMagnitudeError": 0.06566806487805266,
+            "peak": 0.2921643853187561,
+            "rms": 0.06335341930389404,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 4.538063345621476,
+            "p99Ms": 5.9649049791914885,
+            "maxMs": 15.662249999877531,
+            "chunks": 4132
+          }
+        }
+      ],
+      "aggregate": {
+        "bundled": {
+          "mae": 0.005388718657195568,
+          "mse": 9.49060202401597e-05,
+          "correlation": 0.9887349397700318,
+          "snrDb": 16.121555709838866,
+          "spectralError": 0.11782638770636991,
+          "logMagnitudeError": 0.05923734110569336
+        },
+        "long-unseen": {
+          "mae": 0.0046606334508396685,
+          "mse": 6.343768336591893e-05,
+          "correlation": 0.992944998932859,
+          "snrDb": 19.28686499595642,
+          "spectralError": 0.08659451333526852,
+          "logMagnitudeError": 0.06177938568232186
+        },
+        "all": {
+          "mae": 0.005065125232148502,
+          "mse": 8.092009274049714e-05,
+          "correlation": 0.9906060771757327,
+          "snrDb": 17.528359837002224,
+          "spectralError": 0.10394555465254708,
+          "logMagnitudeError": 0.06036713869530603
+        }
+      }
+    },
+    "q8-max": {
+      "path": "public/models/common-voice-llvc-q8-max.onnx",
+      "size": {
+        "bytes": 5793582,
+        "megabytes": 5.793582,
+        "fractionOfFp32": 0.4083016519650318
+      },
+      "samples": [
+        {
+          "sample": "english",
+          "category": "bundled",
+          "durationSeconds": 22.65075,
+          "quality": {
+            "mae": 0.011604522354900837,
+            "mse": 0.000377615011529997,
+            "correlation": 0.9484661673788879,
+            "snrDb": 9.95845890045166,
+            "spectralError": 0.21907658371797634,
+            "logMagnitudeError": 0.1264752517148636,
+            "peak": 0.38817375898361206,
+            "rms": 0.056572843343019485,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.3020646079577154,
+            "p99Ms": 6.672618191660142,
+            "maxMs": 12.176666998129804,
+            "chunks": 1742
+          }
+        },
+        {
+          "sample": "french",
+          "category": "bundled",
+          "durationSeconds": 21.2111875,
+          "quality": {
+            "mae": 0.009316890500485897,
+            "mse": 0.0002426804567221552,
+            "correlation": 0.965022175058788,
+            "snrDb": 11.468938827514648,
+            "spectralError": 0.1962792488209538,
+            "logMagnitudeError": 0.12817561351090073,
+            "peak": 0.3263721168041229,
+            "rms": 0.053341299295425415,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 2.9981663071575304,
+            "p99Ms": 4.26367059990298,
+            "maxMs": 13.016666998737492,
+            "chunks": 1631
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "bundled",
+          "durationSeconds": 27.2483125,
+          "quality": {
+            "mae": 0.01161409541964531,
+            "mse": 0.00042217105510644615,
+            "correlation": 0.9342035543361022,
+            "snrDb": 8.73984146118164,
+            "spectralError": 0.2671422815314425,
+            "logMagnitudeError": 0.11667260570852789,
+            "peak": 0.3350871205329895,
+            "rms": 0.04800598695874214,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.1617260925462034,
+            "p99Ms": 4.218604149173192,
+            "maxMs": 5.8236670010956,
+            "chunks": 2096
+          }
+        },
+        {
+          "sample": "japanese",
+          "category": "bundled",
+          "durationSeconds": 30.95175,
+          "quality": {
+            "mae": 0.012464126572012901,
+            "mse": 0.0005676409928128123,
+            "correlation": 0.9465629999580275,
+            "snrDb": 9.74282169342041,
+            "spectralError": 0.2373221974713211,
+            "logMagnitudeError": 0.1276654886304909,
+            "peak": 0.3834606111049652,
+            "rms": 0.06589801609516144,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.221799776014557,
+            "p99Ms": 4.336053179722513,
+            "maxMs": 7.077583002683241,
+            "chunks": 2380
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "bundled",
+          "durationSeconds": 28.409375,
+          "quality": {
+            "mae": 0.011078335344791412,
+            "mse": 0.00037049411912448704,
+            "correlation": 0.9451150988885306,
+            "snrDb": 9.678184509277344,
+            "spectralError": 0.23350042005496216,
+            "logMagnitudeError": 0.12078019593760267,
+            "peak": 0.35084280371665955,
+            "rms": 0.05364275723695755,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.1971567190098136,
+            "p99Ms": 4.235603720007929,
+            "maxMs": 7.136832999094622,
+            "chunks": 2185
+          }
+        },
+        {
+          "sample": "english",
+          "category": "long-unseen",
+          "durationSeconds": 56.891125,
+          "quality": {
+            "mae": 0.008159130811691284,
+            "mse": 0.0001667431351961568,
+            "correlation": 0.9749835910140487,
+            "snrDb": 13.053329467773438,
+            "spectralError": 0.15595815117180623,
+            "logMagnitudeError": 0.11319847229658953,
+            "peak": 0.33025163412094116,
+            "rms": 0.056002724915742874,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.3943978094278044,
+            "p99Ms": 4.959238998708315,
+            "maxMs": 15.224375001707813,
+            "chunks": 4376
+          }
+        },
+        {
+          "sample": "french",
+          "category": "long-unseen",
+          "durationSeconds": 55.600625,
+          "quality": {
+            "mae": 0.008129101246595383,
+            "mse": 0.00013933143054600805,
+            "correlation": 0.9832393771471682,
+            "snrDb": 14.646620750427246,
+            "spectralError": 0.1360026804417641,
+            "logMagnitudeError": 0.11832074375026011,
+            "peak": 0.2643278241157532,
+            "rms": 0.06058722734451294,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.4199104929871433,
+            "p99Ms": 6.00755199775449,
+            "maxMs": 13.947208000899991,
+            "chunks": 4276
+          }
+        },
+        {
+          "sample": "italian",
+          "category": "long-unseen",
+          "durationSeconds": 54.5853125,
+          "quality": {
+            "mae": 0.012170769274234772,
+            "mse": 0.0003941166214644909,
+            "correlation": 0.9507478792093041,
+            "snrDb": 10.173076629638672,
+            "spectralError": 0.2266871647089085,
+            "logMagnitudeError": 0.12415011019595736,
+            "peak": 0.3293330669403076,
+            "rms": 0.06065170466899872,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.3307047039647615,
+            "p99Ms": 4.67613249933492,
+            "maxMs": 8.662959000503179,
+            "chunks": 4198
+          }
+        },
+        {
+          "sample": "spanish",
+          "category": "long-unseen",
+          "durationSeconds": 53.7255,
+          "quality": {
+            "mae": 0.01276801060885191,
+            "mse": 0.0004235217929817736,
+            "correlation": 0.9520280318209381,
+            "snrDb": 10.285229682922363,
+            "spectralError": 0.22131540467631777,
+            "logMagnitudeError": 0.11901605136376207,
+            "peak": 0.28083598613739014,
+            "rms": 0.06405925005674362,
+            "finite": true
+          },
+          "nativeTiming": {
+            "averageMs": 3.2067462277506142,
+            "p99Ms": 4.412911769359198,
+            "maxMs": 14.569041999493493,
+            "chunks": 4132
+          }
+        }
+      ],
+      "aggregate": {
+        "bundled": {
+          "mae": 0.011215594038367272,
+          "mse": 0.00039612032705917957,
+          "correlation": 0.9478739991240672,
+          "snrDb": 9.917649078369141,
+          "spectralError": 0.23066414631933116,
+          "logMagnitudeError": 0.12395383110047715
+        },
+        "long-unseen": {
+          "mae": 0.010306752985343337,
+          "mse": 0.00028092824504710734,
+          "correlation": 0.9652497197978649,
+          "snrDb": 12.03956413269043,
+          "spectralError": 0.18499085024969913,
+          "logMagnitudeError": 0.11867134440164227
+        },
+        "all": {
+          "mae": 0.010811664681467745,
+          "mse": 0.00034492384616492525,
+          "correlation": 0.9555965416457551,
+          "snrDb": 10.860722435845268,
+          "spectralError": 0.21036490362171695,
+          "logMagnitudeError": 0.12160605923432831
+        }
+      }
+    }
+  }
+}

@@ -10,7 +10,12 @@
     "test:neural": "bun scripts/test-neural.mjs",
     "test:jitter": "bun scripts/test-jitter-buffer.mjs",
     "test:playback": "bun scripts/test-playback-web.mjs",
+    "test:playback:variants": "bun scripts/test-playback-variants-web.mjs",
     "benchmark:web": "bun scripts/benchmark-web.mjs",
+    "benchmark:variants": "bun scripts/benchmark-variants-web.mjs",
+    "quantize:variants": "python3 scripts/quantize-llvc-variants.py",
+    "evaluate:variants": "python3 scripts/evaluate-model-variants.py",
+    "render:comparisons": "python3 scripts/render-quantization-comparisons.py",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

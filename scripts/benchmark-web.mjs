@@ -5,7 +5,7 @@ import { join } from 'node:path'
 
 const port = 9333
 const threads = Number(process.argv[2] || 8)
-const model = process.argv[3] || 'student128'
+const model = process.argv[3] || 'q8-high'
 const thresholdMs = Number(process.env.BENCHMARK_THRESHOLD_MS || 2.4)
 const profile = await mkdtemp(join(tmpdir(), 'voices-chrome-'))
 const chrome = spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', [

@@ -15,6 +15,12 @@ const SAMPLES = [
   { id: 'japanese', language: 'JA', label: 'Japanese', voice: 'Aiko', duration: '0:31', file: '/audio/japanese.wav' },
 ] as const
 
+const MODEL_OPTIONS = [
+  { id: 'current', label: 'Original FP32', note: 'Reference quality' },
+  { id: 'q8-high', label: 'Q8 High', note: 'Recommended' },
+  { id: 'q8-max', label: 'Q8 Max', note: 'Smallest / fastest' },
+] as const
+
 type AudioEngine = {
   ctx: AudioContext
   source: MediaElementAudioSourceNode
@@ -29,7 +35,9 @@ function VoiceLab() {
   const benchmarkParams = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search)
   const benchmarkEnabled = benchmarkParams?.get('benchmark') === '1'
   const benchmarkThreads = Number(benchmarkParams?.get('threads') || 8)
-  const benchmarkModel = benchmarkParams?.get('model') || 'student128'
+  const benchmarkModel = benchmarkParams?.get('model') || 'q8-high'
+  const requestedModel = benchmarkParams?.get('model') || 'q8-high'
+  const requestedThreads = Number(benchmarkParams?.get('threads') || 0) || undefined
   const [voiceMode, setVoiceMode] = useState<VoiceMode>('original')
   const [selectedSample, setSelectedSample] = useState<string>(SAMPLES[0].id)
   const [neuralStatus, setNeuralStatus] = useState<NeuralStatus>('loading')
@@ -71,7 +79,11 @@ function VoiceLab() {
       setNeuralStatus('error')
       setMessage('Neural model could not be loaded')
     }
-    worker.postMessage({ type: 'init', threads: benchmarkEnabled ? benchmarkThreads : undefined, model: benchmarkEnabled ? benchmarkModel : undefined })
+    worker.postMessage({
+      type: 'init',
+      threads: benchmarkEnabled ? benchmarkThreads : requestedThreads,
+      model: benchmarkEnabled ? benchmarkModel : requestedModel,
+    })
 
     return () => {
       worker.terminate()
@@ -226,6 +238,17 @@ function VoiceLab() {
             <button className={voiceMode === 'neural' ? 'selected' : ''} onClick={() => applyMode('neural')} role="tab" aria-selected={voiceMode === 'neural'}><span>03</span>Neural</button>
           </div>
           <div className="chain"><span>PLAYBACK</span><i>→</i><span className="chain-active">{voiceMode === 'original' ? 'BYPASS' : voiceMode === 'lite' ? 'TONAL PROFILE' : 'LLVC'}</span><i>→</i><span>{voiceMode === 'neural' ? 'ONNX' : 'OUTPUT'}</span></div>
+          <label className="model-picker">
+            <span>NEURAL MODEL</span>
+            <select value={requestedModel} onChange={(event) => {
+              const params = new URLSearchParams(window.location.search)
+              params.set('model', event.target.value)
+              params.set('threads', event.target.value === 'current' ? '2' : '4')
+              window.location.search = params.toString()
+            }}>
+              {MODEL_OPTIONS.map((model) => <option key={model.id} value={model.id}>{model.label} · {model.note}</option>)}
+            </select>
+          </label>
           <ModeCard mode={voiceMode} neuralStatus={neuralStatus} />
         </div>
 
@@ -257,5 +280,5 @@ function makeSoftCurve(amount: number) {
 function ModeCard({ mode, neuralStatus }: { mode: VoiceMode; neuralStatus: NeuralStatus }) {
   if (mode === 'original') return <div className="common-mode-card"><span className="mode-glyph">○</span><div><strong>Original audio</strong><p>The generated voice plays untouched. Use this baseline to hear how much identity changes in the other modes.</p><ul><li>No processing</li><li>Original timing and timbre</li><li>Immediate playback</li></ul></div></div>
   if (mode === 'lite') return <div className="common-mode-card"><span className="mode-glyph">≈</span><div><strong>Common Voice Lite</strong><p>A consistent tonal profile using voice-band EQ, strong dynamics normalization, soft saturation, and limiting.</p><ul><li>Near-zero latency</li><li>No model required</li><li>Subtle identity reduction</li></ul></div></div>
-  return <div className="common-mode-card neural-card"><span className="mode-glyph">◇</span><div><strong>Common Voice Neural</strong><p>A distilled LLVC model maps every language and speaker toward one learned target identity.</p><ul><li>{neuralStatus === 'loading' ? 'Preloading model…' : neuralStatus === 'error' ? 'Model unavailable' : `${neuralStatus.toUpperCase()} ready`}</li><li>100 ms low-latency buffer</li><li>Browser-local inference</li></ul></div></div>
+  return <div className="common-mode-card neural-card"><span className="mode-glyph">◇</span><div><strong>Common Voice Neural</strong><p>The full LLVC architecture maps every language and speaker toward one learned target identity; Q8 options compress its trained weights without retraining.</p><ul><li>{neuralStatus === 'loading' ? 'Preloading model…' : neuralStatus === 'error' ? 'Model unavailable' : `${neuralStatus.toUpperCase()} ready`}</li><li>100 ms low-latency buffer</li><li>Browser-local inference</li></ul></div></div>
 }

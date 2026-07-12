@@ -1,0 +1,26 @@
+{
+  "generatedAt": "2026-07-12T20:34:47.611Z",
+  "results": [
+    {
+      "model": "current",
+      "threads": 2,
+      "sample": "/audio/long-tests/english.wav",
+      "seconds": 45,
+      "status": "Runtime: WASM · iso 2t · avg 5.8ms · p99 6ms · max 15ms · queue 0 · buffer 91ms · underruns 0"
+    },
+    {
+      "model": "q8-high",
+      "threads": 4,
+      "sample": "/audio/long-tests/english.wav",
+      "seconds": 45,
+      "status": "Runtime: WASM · iso 4t · avg 5.6ms · p99 8ms · max 19ms · queue 0 · buffer 91ms · underruns 0"
+    },
+    {
+      "model": "q8-max",
+      "threads": 4,
+      "sample": "/audio/long-tests/english.wav",
+      "seconds": 45,
+      "status": "Runtime: WASM · iso 4t · avg 5.0ms · p99 5ms · max 10ms · queue 0 · buffer 104ms · underruns 0"
+    }
+  ]
+}

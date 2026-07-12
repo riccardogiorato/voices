@@ -6,6 +6,9 @@ import { join } from 'node:path'
 const port = 9334
 const samplePath = process.argv[2]
 const playbackSeconds = Number(process.argv[3] || 12)
+const model = process.argv[4] || 'q8-high'
+const threads = Number(process.argv[5] || 4)
+const maxAverageMs = Number(process.env.PLAYBACK_THRESHOLD_MS || 13)
 const profile = await mkdtemp(join(tmpdir(), 'voices-playback-chrome-'))
 const chrome = spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', [
   '--headless=new',
@@ -14,7 +17,7 @@ const chrome = spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chro
   '--no-first-run',
   '--disable-background-networking',
   '--autoplay-policy=no-user-gesture-required',
-  'http://localhost:5180/',
+  `http://localhost:5180/?model=${encodeURIComponent(model)}&threads=${threads}`,
 ], { stdio: 'ignore' })
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -86,8 +89,8 @@ try {
   const average = Number(status.match(/avg ([\d.]+)ms/)?.[1])
   const buffer = Number(status.match(/buffer ([\d.]+)ms/)?.[1])
   const underruns = Number(status.match(/underruns (\d+)/)?.[1])
-  if (!status.includes('iso 2t')) throw new Error(`Expected isolated two-thread WASM: ${status}`)
-  if (!(average <= 2.4)) throw new Error(`Playback average ${average}ms exceeds 2.4ms`)
+  if (!status.includes(`iso ${threads}t`)) throw new Error(`Expected isolated ${threads}-thread WASM: ${status}`)
+  if (!(average <= maxAverageMs)) throw new Error(`Playback average ${average}ms exceeds ${maxAverageMs}ms`)
   if (!(buffer >= 70)) throw new Error(`Playback buffer drained to ${buffer}ms`)
   if (underruns !== 0) throw new Error(`Playback had ${underruns} underruns`)
 } finally {

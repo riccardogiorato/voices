@@ -877,3 +877,52 @@ Evidence:
 - `reports/voice-model-quality.json`
 - `reports/voice-model-browser-control.json`
 - Listening matrix: `public/audio/model-comparison/README.md`
+
+---
+
+## 17. Automated custom-speaker LLVC pipeline (2026-07-13)
+
+Added `scripts/customize-llvc.py`, an end-to-end pipeline that accepts one or
+more consented target-speaker recordings and produces consistently named custom
+artifacts:
+
+```text
+llvc-base-<voice>.onnx
+llvc-optimized-q8-<voice>.onnx
+llvc-<voice>.json
+```
+
+Because LLVC requires identical-content source/target pairs, the preparation
+stage uses OpenVoice V2 Q8 to render a multi-speaker source corpus toward the
+custom reference. It splits by source-file identity into train, validation, and
+development sets, then writes aligned 16 kHz 4.096-second LLVC pairs. Existing
+paired datasets can bypass synthesis.
+
+`scripts/finetune-llvc.py` starts from the official LLVC-NC generator weights,
+uses a fresh discriminator, and bounds training by an explicit step count. It
+runs on CUDA or CPU and records before/after validation/development MAE. PyTorch
+2.5 cannot reliably backpropagate the LLVC discriminator through MPS CPU
+fallback, so `auto` selects CPU on Apple Silicon and an explicit MPS request
+warns and falls back to CPU.
+
+`scripts/export-llvc.py` now accepts an explicit config, removes stale external
+data before repeated exports, rewrites simplified external-data references
+correctly, and rejects simplification when constant folding increases total
+bytes. `scripts/quantize-llvc-q8.py` calibrates any compatible custom export,
+quantizes the eight dominant 512×512 pointwise convolutions, checks finite WASM-
+compatible output, and reports FP32/Q8 waveform agreement.
+
+Smoke validation covered:
+
+- custom-name slugging and dry-run paths;
+- target-reference normalization and three-source OpenVoice pair generation;
+- one bounded CPU training step from the official LLVC-NC checkpoint;
+- explicit MPS fallback behavior;
+- export of the newly fine-tuned checkpoint with 240-in/208-out state shapes;
+- Q8 optimization of that export (13.53 MB to 7.36 MB, 0.9968 correlation on
+  the tiny smoke calibration set, finite output);
+- ONNX Runtime Web/WASM loading and inference of the generated custom Q8 model.
+
+The tiny one-step smoke model is temporary test evidence, not a usable custom
+voice and is not committed. Full usage and rights requirements are documented
+in `CUSTOM-VOICE.md`.

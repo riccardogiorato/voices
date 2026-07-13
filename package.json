@@ -11,6 +11,7 @@
     "benchmark:voice-models": "python3 scripts/benchmark-voice-models.py",
     "benchmark:meanvc": "python3 scripts/benchmark-meanvc.py",
     "evaluate:voice-models": "python3 scripts/evaluate-voice-model-quality.py",
+    "customize:llvc": "python3 scripts/customize-llvc.py",
     "start": "vite preview",
     "test:neural": "bun scripts/test-neural.mjs",
     "test:jitter": "bun scripts/test-jitter-buffer.mjs",

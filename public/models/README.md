@@ -21,6 +21,22 @@ reference and all three are selectable in the web app.
 
 The ONNX graphs run locally with ONNX Runtime Web. No microphone audio is uploaded.
 
+## Custom target voices
+
+`scripts/customize-llvc.py` builds one same-shape LLVC model per consented
+speaker. It generates or accepts aligned parallel pairs, fine-tunes the official
+LLVC-NC generator, exports FP32 ONNX, and creates the conservative Q8-High
+deployment variant:
+
+```text
+custom/llvc-base-<voice>.onnx
+custom/llvc-optimized-q8-<voice>.onnx
+custom/llvc-<voice>.json
+```
+
+See [`CUSTOM-VOICE.md`](../../CUSTOM-VOICE.md) for setup, data requirements,
+staged execution, hardware limitations, and the complete command.
+
 Generate and evaluate all four experimental precision variants with:
 
 ```bash

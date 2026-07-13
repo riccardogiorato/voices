@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs'
 import * as ort from 'onnxruntime-web'
 
-const model = readFileSync('public/models/common-voice-llvc-q8-high.onnx')
+const modelPath = process.argv[2] ?? 'public/models/common-voice-llvc-q8-high.onnx'
+const model = readFileSync(modelPath)
 const session = await ort.InferenceSession.create(model, {
   executionProviders: ['wasm'],
 })
@@ -16,4 +17,4 @@ const output = await session.run({
 
 if (output.converted.dims.join(',') !== '1,1,208') throw new Error(`Unexpected output shape: ${output.converted.dims}`)
 if (![...output.converted.data].every(Number.isFinite)) throw new Error('Neural output contains non-finite samples')
-console.log('Q8 High LLVC WASM smoke test passed: 240 input samples → 208 output samples')
+console.log(`${modelPath} WASM smoke test passed: 240 input samples → 208 output samples`)
